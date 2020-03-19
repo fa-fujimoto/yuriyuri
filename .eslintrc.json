@@ -1,0 +1,87 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "jsx": true,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "react/jsx-uses-react": [
+      1
+    ],
+    "react/jsx-uses-vars": 1,
+    "max-len": [
+      "warn",
+      {
+        "code": 140,
+        "ignoreRegExpLiterals": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreStrings": true,
+        "ignoreUrls": true
+      }
+    ],
+    "indent": [
+      "error",
+      2
+    ],
+    "no-console": 1,
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allowAfterThis": true,
+        "allowAfterSuper": true
+      }
+    ],
+    "no-plusplus": [
+      "error",
+      {
+        "allowForLoopAfterthoughts": true
+      }
+    ],
+    "require-jsdoc": "off",
+    "valid-jsdoc": "off",
+    "@typescript-eslint/no-empty-interface": "warn",
+    "semi": "off",
+    "@typescript-eslint/semi": ["error", "never"],
+    "comma-dangle": ["error", "always-multiline"],
+    "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        "multiline" :{
+          "delimiter": "none",
+          "requireLast": false
+        },
+        "singleline" :{
+          "delimiter": "comma",
+          "requireLast": false
+        }
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/interface-name-prefix": [
+      "error",
+      {
+        "prefixWithI": "always",
+        "allowUnderscorePrefix": true
+      }
+    ]
+  }
+}

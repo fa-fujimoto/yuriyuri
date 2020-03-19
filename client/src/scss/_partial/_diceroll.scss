@@ -1,0 +1,77 @@
+@keyframes diceroll {
+  $time: 100 / 6;
+
+  0% {
+    background-image: url('../img/dicebox1.png');
+  }
+
+  @for $i from 1 through 5 {
+    #{$time * $i + '%'} {
+      background-image: url(#{'../img/dicebox' + ($i + 1) + '.png'});
+    }
+  }
+
+  100% {
+    background-image: url('../img/dicebox1.png');
+  }
+}
+
+@keyframes dicePop {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.diceroll {
+  &__roll-area {
+    &--rolling {
+      animation: dicePop 1s ease 1;
+    }
+  }
+
+  &__dice {
+    width: 50px;
+    height: 54px;
+    background-image: url('../img/dicebox1.png');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 50px 54px;
+    animation-fill-mode: both;
+
+    &--rolling {
+      animation: diceroll 0.5s linear infinite;
+    }
+
+    &--value1 {
+      background-image: url('../img/dicebox1.png');
+    }
+
+    &--value2 {
+      background-image: url('../img/dicebox2.png');
+    }
+
+    &--value3 {
+      background-image: url('../img/dicebox3.png');
+    }
+
+    &--value4 {
+      background-image: url('../img/dicebox4.png');
+    }
+
+    &--value5 {
+      background-image: url('../img/dicebox5.png');
+    }
+
+    &--value6 {
+      background-image: url('../img/dicebox6.png');
+    }
+  }
+}

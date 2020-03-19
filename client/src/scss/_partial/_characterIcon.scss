@@ -1,0 +1,298 @@
+@import './color';
+@import './util';
+@import './z-index';
+
+@mixin character-icon($color) {
+  background-color: $color;
+
+  .character-icon__inner {
+    &::before {
+      border: {
+        top-color: $color;
+        right-color: $color;
+      }
+    }
+
+    &::after {
+      border: {
+        bottom-color: $color;
+        left-color: $color;
+      }
+    }
+  }
+
+  .character-icon__last-name,
+  .character-icon__first-name {
+    text-shadow: 1px 1px 2px darken($color, 20%);
+    background-color: rgba(darken($color, 20%), 0.8);
+    border-bottom: 1px solid $color;
+  }
+}
+
+.character-icon {
+  $wrapper: &;
+
+  position: relative;
+  box-sizing: border-box;
+  width: 150px;
+  height: 150px;
+  padding: 5px;
+  overflow: hidden;
+  border: 1px solid #aaa;
+  border-radius: 3% 0 3% 0;
+
+  &::after {
+    @include centerize();
+
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    content: '';
+  }
+
+  &--lg {
+    width: 220px;
+    height: 220px;
+    padding: 10px;
+
+    & #{$wrapper} {
+      &__inner {
+        &::before,
+        &::after {
+          border-width: 16px;
+        }
+      }
+
+      &__last-name,
+      &__first-name {
+        font-size: 22px;
+      }
+
+      &__label {
+        font-size: 108px;
+      }
+
+      &__empty-box {
+        font-size: 46px;
+      }
+    }
+  }
+
+  &--sm {
+    width: 100px;
+    height: 100px;
+    padding: 2px;
+
+    & #{$wrapper} {
+      &__inner {
+        &::before,
+        &::after {
+          border-width: 6px;
+        }
+      }
+
+      &__last-name,
+      &__first-name {
+        padding: 2px;
+        font-size: 12px;
+      }
+
+      &__last-name {
+        top: 3px;
+        left: 3px;
+      }
+
+      &__first-name {
+        right: 3px;
+        bottom: 3px;
+      }
+
+      &__label {
+        font-size: 54px;
+      }
+
+      &__empty-box {
+        font-size: 20px;
+      }
+    }
+  }
+
+  &--ss {
+    width: 56px;
+    height: 56px;
+    padding: 2px;
+
+    & #{$wrapper} {
+      &__inner {
+        &::before,
+        &::after {
+          border-width: 4px;
+        }
+      }
+
+      &__last-name,
+      &__first-name {
+        display: none;
+      }
+
+      &__label {
+        font-size: 34px;
+      }
+
+      &__empty-box {
+        font-size: 20px;
+      }
+    }
+  }
+
+  &--active {
+    &::after {
+      background-color: rgba(#000, 0.2);
+    }
+  }
+
+  &--disabled {
+    &::after {
+      background-color: rgba(#666, 0.5);
+    }
+  }
+
+  &--selected {
+    & #{$wrapper}__label {
+      color: rgba(#fff, 0.9);
+    }
+  }
+
+  &--selecting {
+    & #{$wrapper}__label {
+      color: rgba(#fff, 0.7);
+      background-color: rgba(#5dffa8, 0.6);
+    }
+  }
+
+  &--black {
+    @include character-icon($character-border-black-color);
+  }
+
+  &--gray {
+    @include character-icon($character-border-gray-color);
+  }
+
+  &--green {
+    @include character-icon($character-border-green-color);
+  }
+
+  &--pink {
+    @include character-icon($character-border-pink-color);
+  }
+
+  &--purple {
+    @include character-icon($character-border-purple-color);
+  }
+
+  &--red {
+    @include character-icon($character-border-red-color);
+  }
+
+  &--sky {
+    @include character-icon($character-border-sky-color);
+  }
+
+  &--white {
+    @include character-icon($character-border-white-color);
+  }
+
+  &--yellow {
+    @include character-icon($character-border-yellow-color);
+  }
+
+  &--empty {
+    @include character-icon(#959595);
+
+    & #{$wrapper} {
+      &__empty-box {
+        color: #dbdbdb;
+        text-shadow: -1px -1px 1px rgba(#535353, 0.4);
+        background-color: #f2f2f2;
+      }
+    }
+  }
+
+  &__inner {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 3px;
+
+    &::before,
+    &::after {
+      position: absolute;
+      z-index: 3;
+      width: 0;
+      height: 0;
+      margin: auto;
+      content: '';
+      border: 8px solid transparent;
+    }
+
+    &::before {
+      top: 0;
+      right: 0;
+    }
+
+    &::after {
+      bottom: 0;
+      left: 0;
+    }
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  &__last-name,
+  &__first-name {
+    position: absolute;
+    display: inline-block;
+    padding: 5px;
+    font-size: 16px;
+    color: #fff;
+  }
+
+  &__last-name {
+    top: 8px;
+    left: 8px;
+    text-align: left;
+  }
+
+  &__first-name {
+    right: 8px;
+    bottom: 8px;
+    text-align: right;
+  }
+
+  &__label,
+  &__empty-box {
+    @include centerize();
+
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  &__label {
+    font-size: 68px;
+  }
+
+  &__empty-box {
+    font-size: 30px;
+  }
+}

@@ -1,0 +1,126 @@
+@mixin btn-design($normal-color, $active-color, $disabled-color) {
+  color: $normal-color;
+  background-color: #fff;
+  border-color: $normal-color;
+
+  &::before {
+    border-top-color: $normal-color;
+    border-right-color: $normal-color;
+  }
+
+  &::after {
+    border-bottom-color: $normal-color;
+    border-left-color: $normal-color;
+  }
+
+  &.active:not(.disabled) {
+    color: #fff;
+    background-color: $active-color;
+    border-color: $active-color;
+
+    &::before,
+    &::after {
+      border-color: transparent;
+    }
+  }
+
+  &.disabled {
+    color: $disabled-color;
+    background-color: #eee;
+    border-color: $disabled-color;
+
+    &::before {
+      border-top-color: $disabled-color;
+      border-right-color: $disabled-color;
+    }
+
+    &::after {
+      border-bottom-color: $disabled-color;
+      border-left-color: $disabled-color;
+    }
+  }
+}
+
+.button {
+  position: relative;
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 3px 0 3px 0;
+  transition: 0.5s;
+
+  &::before,
+  &::after {
+    position: absolute;
+    width: 0;
+    height: 0;
+    content: '';
+    border: 6px solid transparent;
+    transition: 0.5s;
+  }
+
+  &::before {
+    top: 0;
+    right: 0;
+    border-top-color: #fff;
+    border-right-color: #fff;
+  }
+
+  &::after {
+    bottom: 0;
+    left: 0;
+    border-bottom-color: #fff;
+    border-left-color: #fff;
+  }
+
+  & + & {
+    margin-left: 12px;
+  }
+
+  &--lg {
+    padding: 8px 16px;
+    font-size: 20px;
+    line-height: 30px;
+
+    &::before,
+    &::after {
+      border-width: 8px;
+    }
+  }
+
+  &--sm {
+    padding: 4px 8px;
+    font-size: 14px;
+    line-height: 21px;
+
+    &::before,
+    &::after {
+      border-width: 4px;
+    }
+  }
+
+  &--block {
+    display: block;
+  }
+
+  &--primary {
+    @include btn-design(#5facff, #4c99ed, #93b3d5);
+  }
+
+  &--secondary {
+    @include btn-design(#a0a0a0, #838383, #d8d8d8);
+  }
+
+  &--danger {
+    @include btn-design(#ff5f5f, #ed4c4c, #d59393);
+  }
+
+  &.disabled {
+    cursor: default;
+  }
+}

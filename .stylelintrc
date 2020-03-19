@@ -1,0 +1,20 @@
+{
+  "plugins": ["stylelint-scss"],
+  "extends": ["stylelint-config-standard", "stylelint-config-recess-order"],
+  "rules": {
+    "indentation": 2,
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": true,
+    "at-rule-no-vendor-prefix": true,
+    "font-family-name-quotes": "always-where-recommended",
+    "font-weight-notation": "named-where-possible",
+    "function-url-quotes": "always",
+    "media-feature-name-no-vendor-prefix": true,
+    "no-descending-specificity": null,
+    "property-no-vendor-prefix": true,
+    "selector-attribute-quotes": "never",
+    "selector-no-vendor-prefix": true,
+    "string-quotes": "single",
+    "value-no-vendor-prefix": true
+  }
+}

@@ -1,0 +1,52 @@
+@mixin clearfix {
+  &::after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+}
+
+@mixin box-design($size, $radius, $z-index, $before-color, $after-color: $before-color) {
+  position: relative;
+  overflow: hidden;
+  border-radius: $radius 0 $radius 0;
+
+  &::before,
+  &::after {
+    position: absolute;
+    z-index: $z-index;
+    width: 0;
+    height: 0;
+    content: '';
+    border: $size solid transparent;
+  }
+
+  &::before {
+    top: 0;
+    right: 0;
+    border-top-color: $before-color;
+    border-right-color: $before-color;
+  }
+
+  &::after {
+    bottom: 0;
+    left: 0;
+    border-bottom-color: $after-color;
+    border-left-color: $after-color;
+  }
+}
+
+@mixin centerize($top: 0, $right: 0, $bottom: 0, $left: 0, $position: absolute) {
+  position: $position;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+  margin: auto;
+}
+
+@mixin circle($size) {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+}

@@ -1,0 +1,71 @@
+@import './util';
+@import './color';
+@import './z-index';
+
+.dialog {
+  $base-horizontal-space: 24px;
+  $base-vertical-space: 16px;
+  $border-width: 1px;
+
+  $header-font-size: 22px;
+  $header-line-height: 30px;
+  $header-vertical-space: $base-vertical-space - (($header-line-height - $header-font-size) / 2);
+
+  $body-font-size: 16px;
+  $body-line-height: 24px;
+  $body-vertical-space: $base-vertical-space - (($body-line-height - $body-font-size) / 2);
+  $body-min-height: $body-line-height * 8;
+
+  $button-height: 24px;
+
+  @include centerize();
+
+  z-index: $dialog-index;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $dialog-shade-color;
+
+  &__box {
+    width: 500px;
+    background-color: $dialog-background-color;
+    border: $border-width solid $dialog-border-color;
+    border-radius: 10px 0 10px 0;
+  }
+
+  &__header {
+    box-sizing: border-box;
+    padding: $header-vertical-space 0;
+    margin: 0 $base-horizontal-space;
+    border-bottom: $border-width solid $dialog-border-color;
+  }
+
+  &__title {
+    font-size: $header-font-size;
+    line-height: $header-line-height;
+    color: $dialog-font-color;
+  }
+
+  &__body {
+    box-sizing: border-box;
+    min-height: $body-min-height;
+    padding: $body-vertical-space 0;
+    margin: 0 $base-horizontal-space;
+    line-height: $body-line-height;
+    border-bottom: $border-width solid $dialog-border-color;
+  }
+
+  &__content {
+    font-size: $body-font-size;
+    line-height: $body-line-height;
+    color: $dialog-font-color;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: $base-vertical-space 0;
+    margin: 0 $base-horizontal-space;
+  }
+}

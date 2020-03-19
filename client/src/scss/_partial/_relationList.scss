@@ -1,0 +1,194 @@
+@import './color';
+@import './util';
+
+@mixin relation-list-item-design($block-name, $color) {
+  & #{$block-name}__icon {
+    &::before {
+      border-bottom-color: $color;
+      border-left-color: $color;
+    }
+  }
+
+  & #{$block-name}__info {
+    &::after {
+      border-top-color: $color;
+      border-right-color: $color;
+    }
+  }
+}
+
+.relation-list {
+  $block-name: &;
+
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  border: 1px solid $border-color;
+
+  &__inner {
+    display: table;
+    width: 100%;
+  }
+
+  &__item {
+    display: table-row;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #fff;
+
+    &--black {
+      @include relation-list-item-design($block-name, $character-border-black-color);
+    }
+
+    &--gray {
+      @include relation-list-item-design($block-name, $character-border-gray-color);
+    }
+
+    &--green {
+      @include relation-list-item-design($block-name, $character-border-green-color);
+    }
+
+    &--pink {
+      @include relation-list-item-design($block-name, $character-border-pink-color);
+    }
+
+    &--purple {
+      @include relation-list-item-design($block-name, $character-border-purple-color);
+    }
+
+    &--red {
+      @include relation-list-item-design($block-name, $character-border-red-color);
+    }
+
+    &--sky {
+      @include relation-list-item-design($block-name, $character-border-sky-color);
+    }
+
+    &--white {
+      @include relation-list-item-design($block-name, $character-border-white-color);
+    }
+
+    &--yellow {
+      @include relation-list-item-design($block-name, $character-border-yellow-color);
+    }
+  }
+
+  &__icon {
+    position: relative;
+    display: table-cell;
+    padding: 12px 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid $border-color;
+
+    &::before {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      display: block;
+      width: 0;
+      height: 0;
+      content: '';
+      border: 8px solid transparent;
+      border-bottom-color: $border-color;
+      border-left-color: $border-color;
+    }
+  }
+
+  &__info {
+    position: relative;
+    display: table-cell;
+    width: 100%;
+    padding: 8px;
+    vertical-align: middle;
+    border-bottom: 1px solid $border-color;
+    border-left: 1px solid $border-color;
+
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: block;
+      width: 0;
+      height: 0;
+      content: '';
+      border: 8px solid transparent;
+      border-top-color: $border-color;
+      border-right-color: $border-color;
+    }
+
+    &-item {
+      box-sizing: border-box;
+      display: inline-block;
+      width: 50%;
+      padding: 2px;
+
+      &-inner {
+        @include box-design(5px, 3px, 3, #fff);
+
+        padding: 8px 0 8px 8px;
+        background-color: #333;
+        border: 1px solid $border-color;
+      }
+
+      &--positive {
+        & #{$block-name}__info-item-inner {
+          background-color: #de2e2e;
+          border-color: #de2e2e;
+        }
+      }
+
+      &--negative {
+        & #{$block-name}__info-item-inner {
+          background-color: #2e6bde;
+          border-color: #2e6bde;
+        }
+      }
+
+      &--empty {
+        & #{$block-name}__info-item-inner {
+          background-color: #dbdbdb;
+          border-color: #aaa;
+        }
+      }
+
+      &--relationship-true,
+      &--relationship-false {
+        & #{$block-name}__info-item-inner {
+          background-color: #333;
+          border-color: #333;
+        }
+      }
+
+      &--kiss-count {
+        & #{$block-name}__info-item-inner {
+          @include box-design(5px, 3px, 3, $font-color);
+
+          background-color: #fff;
+          border-color: $font-color;
+        }
+
+        & #{$block-name}__info-label,
+        & #{$block-name}__info-value {
+          color: $font-color;
+        }
+      }
+    }
+
+    &-label,
+    &-value {
+      display: inline-block;
+      font-size: 14px;
+      line-height: 1;
+      color: #fff;
+    }
+
+    &-label {
+      padding-right: 0.5em;
+    }
+
+    &-icon {
+      padding-right: 0.25em;
+    }
+  }
+}

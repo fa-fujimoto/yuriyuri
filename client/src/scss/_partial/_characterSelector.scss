@@ -1,0 +1,47 @@
+@import './util';
+
+.character-selector {
+  $borderWidth: 24px;
+  $iconSize: 100px;
+  $listSpace: 24px;
+  $itemSpace: 24px;
+  $columnNum: 5;
+  $boxSize: ($iconSize * $columnNum + $itemSpace * ($columnNum - 1)) + $listSpace * 2 + $borderWidth * 2;
+
+  width: $boxSize;
+  border: 1px solid $font-color;
+
+  &__select-area {
+    padding: $borderWidth;
+  }
+
+  &__button-area {
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  &__list {
+    @include box-design(8px, 8px, 5, #fff);
+
+    background-color: #eee;
+    padding: {
+      top: $listSpace;
+      right: $listSpace - $itemSpace;
+      bottom: $listSpace - $itemSpace;
+      left: $listSpace;
+    }
+  }
+
+  &__item {
+    display: inline-block;
+    margin: {
+      right: $itemSpace;
+      bottom: $itemSpace;
+    }
+  }
+
+  &__viewer {
+    height: 580px;
+    padding: 0 8px;
+  }
+}

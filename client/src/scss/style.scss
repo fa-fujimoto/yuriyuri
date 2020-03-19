@@ -1,0 +1,53 @@
+@import './_partial/public-point-selector';
+@import './_partial/pairSelectorItem';
+@import './_partial/relationList';
+@import './_partial/skillCard';
+@import './_partial/cutin';
+@import './_partial/diceroll';
+@import './_partial/dialog';
+@import './_partial/button';
+@import './_partial/characterSelector';
+@import './_partial/characterViewer';
+@import './_partial/characterIcon';
+@import './_partial/util';
+@import './_partial/z-index';
+
+#app {
+  font-family: 'Sawarabi Mincho', serif;
+}
+
+.relation {
+  position: relative;
+  margin: auto;
+
+  &__diagram {
+    @include centerize();
+
+    z-index: $relation-characters-index;
+    list-style-type: none;
+
+    &--click-area {
+      z-index: $relation-characters-click-area-index;
+    }
+  }
+
+  &__character {
+    position: absolute;
+    z-index: $relation-characters-index;
+    display: inline-block;
+
+    &--active {
+      z-index: $relation-chacter-active-index;
+    }
+  }
+
+  &__line {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $relation-line-index;
+    margin: auto;
+  }
+}

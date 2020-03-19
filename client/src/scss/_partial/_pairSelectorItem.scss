@@ -1,0 +1,49 @@
+@import './color';
+
+.pair-selector-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #fafafa;
+
+  &__view-box {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 16px 24px;
+
+    & > *:not(:last-child) {
+      margin-right: 24px;
+    }
+  }
+
+  &__cross-icon {
+    display: inline-block;
+    width: 50px;
+    font-size: 50px;
+    color: #666;
+  }
+
+  &__input-box {
+    padding: 30px 24px;
+    border-left: 1px solid #666;
+  }
+
+  &__value-label,
+  &__value-input {
+    display: inline-block;
+    font-size: 18px;
+    color: $font-color;
+    vertical-align: middle;
+  }
+
+  &__value-label {
+    line-height: 18px;
+
+    &::after {
+      display: inline-block;
+      padding-right: 0.5em;
+      content: ':';
+    }
+  }
+}
