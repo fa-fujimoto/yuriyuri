@@ -9,7 +9,7 @@ interface IButton {
 
 const Button: FC<IButton> = ({modifire, isDisabled, onClick, children}) => {
   const [isActive, setIsActive] = useState<boolean>(false)
-  const classNameList = useMemo<string[]>(() => [createClassName('button', '', modifire)], [modifire, isActive])
+  const classNameList = useMemo<string[]>(() => [createClassName('button', '', modifire)], [modifire, isActive, isDisabled])
   const handleClick = useMemo(() => isDisabled ? (): void => undefined : onClick, [isDisabled, onClick])
   if (isDisabled) {
     classNameList.push('disabled')

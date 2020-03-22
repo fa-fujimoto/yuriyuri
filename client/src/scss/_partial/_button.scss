@@ -1,3 +1,5 @@
+@import './util';
+
 @mixin btn-design($normal-color, $active-color, $disabled-color) {
   color: $normal-color;
   background-color: #fff;
@@ -42,6 +44,8 @@
 }
 
 .button {
+  @include box-design(6px, 6px, 1, transparent);
+
   position: relative;
   display: inline-block;
   padding: 6px 12px;
@@ -51,31 +55,11 @@
   vertical-align: middle;
   cursor: pointer;
   border: 1px solid transparent;
-  border-radius: 3px 0 3px 0;
   transition: 0.5s;
 
   &::before,
   &::after {
-    position: absolute;
-    width: 0;
-    height: 0;
-    content: '';
-    border: 6px solid transparent;
     transition: 0.5s;
-  }
-
-  &::before {
-    top: 0;
-    right: 0;
-    border-top-color: #fff;
-    border-right-color: #fff;
-  }
-
-  &::after {
-    bottom: 0;
-    left: 0;
-    border-bottom-color: #fff;
-    border-left-color: #fff;
   }
 
   & + & {

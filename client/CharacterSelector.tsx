@@ -3,7 +3,7 @@ import CharacterIcon from './CharacterIcon'
 import { createClassName } from './Util'
 import { ICharacter, CharacterId, IRelation } from './types/type'
 import CharacterViewer from './CharacterViewer'
-import Button from './Button'
+import Dialog from './Dialog'
 
 interface ICharacterSelectorProps {
   characters: ICharacter[]
@@ -130,40 +130,31 @@ const CharacterSelector: FC<ICharacterSelectorProps> = ({
   }, [min, max, otherSelectedIdSet, selectedCharacters, selected])
 
   return (
-    <div className={createClassName('character-selector')}>
-      <div className={createClassName('character-selector', 'select-area')}>
-        <ul className={createClassName('character-selector', 'list')}>
-          {renderItemElement(selected)}
-        </ul>
+    <Dialog
+      title={'支援するペアを選択してください'}
+      positiveTxt={'確定'}
+      onPositiveFunc={isValidate() ? (): void => onSelect(targetIdx, ...selected) : undefined}
+      dangerTxt={'クリア'}
+      onDangerFunc={(): void => onSelect(targetIdx)}
+    >
+      <div className={createClassName('character-selector')}>
+        <div className={createClassName('character-selector', 'select-area')}>
+          <ul className={createClassName('character-selector', 'list')}>
+            {renderItemElement(selected)}
+          </ul>
+        </div>
 
-        <div className={createClassName('character-selector', 'button-area')}>
-          <Button
-            modifire={['primary']}
-            isDisabled={!isValidate()}
-            onClick={(): void => onSelect(targetIdx, ...selected)}
-          >
-            確定
-          </Button>
-
-          <Button
-            modifire={['danger']}
-            onClick={(): void => setSelected([])}
-          >
-            クリア
-          </Button>
+        <div className={createClassName('character-selector', 'viewer', focused ? focused.id : '')}>
+          {
+            focused ? (
+              <CharacterViewer character={focused} characters={characters} relation={relation} isSkillActive={isSkillActive} />
+            ) : (
+              null
+            )
+          }
         </div>
       </div>
-
-      <div className={createClassName('character-selector', 'viewer', focused ? focused.id : '')}>
-        {
-          focused ? (
-            <CharacterViewer character={focused} characters={characters} relation={relation} isSkillActive={isSkillActive} />
-          ) : (
-            null
-          )
-        }
-      </div>
-    </div>
+    </Dialog>
   )
 }
 

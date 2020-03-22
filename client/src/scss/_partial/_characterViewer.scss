@@ -1,10 +1,13 @@
+@import './size';
 @import './util';
 @import './color';
 
 .character-viewer {
   $block-name: &;
 
-  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   &--black {
     #{$block-name}__name {
@@ -64,39 +67,50 @@
     padding-bottom: 24px;
   }
 
+  &__body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   &__name {
     padding: 8px 0 8px 12px;
-    font-size: 32px;
     color: $font-color;
     border-bottom: 2px solid $font-color;
     border-left: 4px solid $font-color;
+
+    &-strong {
+      display: inline-block;
+      font-size: 24px;
+    }
+
+    &-small {
+      display: inline-block;
+      font-size: 20px;
+      vertical-align: bottom;
+    }
   }
 
   &__words {
-    padding-top: 16px;
-    padding-bottom: 32px;
-  }
+    margin-top: 24px;
 
-  &__word {
-    min-height: 40px;
-    margin-top: 16px;
-    font-size: 14px;
-    line-height: 20px;
-
-    &:nth-child(odd) {
-      text-align: left;
+    &-list {
+      margin-top: 8px;
     }
 
-    &:nth-child(even) {
-      text-align: right;
-    }
-  }
+    &-item {
+      display: flex;
+      align-items: center;
+      height: ceil(14px * 1.3) * 2;
+      font-size: 14px;
+      line-height: 1.3;
+      word-wrap: break-all;
+      white-space: normal;
 
-  &__body {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: flex-start;
-    justify-content: center;
+      &:not(:last-child) {
+        padding-bottom: 8px;
+      }
+    }
   }
 
   &__sub-title {
@@ -116,64 +130,75 @@
     }
   }
 
-  &__string-content {
+  &__synopsis {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
     width: 100%;
-    padding: 0 24px;
-    border-left: 1px solid $font-color;
   }
 
   &__info {
-    padding-bottom: 24px;
-  }
+    width: 100%;
 
-  &__info-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 32px;
-    text-align: center;
-  }
+    &-row {
+      padding-top: 16px;
+    }
 
-  &__info-title {
-    padding-right: 18px;
-    font-size: 14px;
-  }
+    &-title {
+      font-size: 12px;
+      line-height: 1;
+    }
 
-  &__info-value {
-    font-size: 20px;
+    &-value {
+      padding: 0.5em 0 0 1em;
+      padding-left: 1em;
+      font-size: 16px;
+      line-height: 1;
+    }
   }
 
   &__relation {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     margin-top: 24px;
-  }
 
-  &__relation-list {
-    height: 220px;
-    margin-top: 24px;
-    background-color: #ccc;
-  }
+    &-list {
+      height: 100%;
+      min-height: 200px;
+      margin-top: 24px;
+      background-color: #ccc;
+    }
 
-  &__relation-empty {
-    height: 220px;
-    font-size: 24px;
-    line-height: 220px;
-    color: $font-color;
-    text-align: center;
+    &-empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      font-size: 24px;
+      color: $font-color;
+      text-align: center;
+    }
   }
 
   &__graph-content {
     padding: 0 24px;
   }
 
+  &__icon {
+    padding-right: 16px;
+  }
+
   &__skill {
-    margin-top: 16px;
-  }
+    width: $skill-card-middle-size;
+    padding-right: 16px;
 
-  &__skill-list {
-    margin-top: 16px;
-  }
+    &-list {
+      margin-top: 16px;
+    }
 
-  &__skill-item {
-    margin-top: 8px;
+    &-item {
+      margin-top: 8px;
+    }
   }
 }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import Button from './Button'
 import { createClassName } from './Util'
 import { ICharacter, CharacterCollection, CharacterId, IRelation } from './types/type'
 import PairSelectorItem from './PairSelectorItem'
 import CharacterSelector from './CharacterSelector'
+import Dialog from './Dialog'
 
 interface IPairSelectorProps {
   characters: ICharacter[]
@@ -30,7 +30,7 @@ interface IPairSelectorState {
   }[]
   excludeList: CharacterId[]
   totalPoint: number
-  selectingPairIdx: number
+  selectingPairIdx?: number
   characterSupportPoint: CharacterCollection<number>
 }
 
@@ -56,7 +56,6 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     this.state = {
       supportPairs,
       excludeList: [],
-      selectingPairIdx: 0,
       totalPoint: defaultValue.length > 0 ? defaultValue.reduce((result, value): number => { return result + value }) : 0,
       characterSupportPoint: Object.assign({}, characterSupportPoint),
     }
@@ -66,6 +65,7 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     this.handlePairSelectClick = this.handlePairSelectClick.bind(this)
     this.handlePairSelect = this.handlePairSelect.bind(this)
     this.handleConfirmBtnClick = this.handleConfirmBtnClick.bind(this)
+    this.renderCharacterSelector = this.renderCharacterSelector.bind(this)
     this.isValidate = this.isValidate.bind(this)
   }
 
@@ -97,15 +97,22 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
   }
 
   handlePairSelect(targetIdx: number, ...selectedCharacter: ICharacter[]): void {
-    const {supportPairs} = this.state
-    const updatedSupportPairs = supportPairs.slice()
-    const [selectedChar1, selectedChar2] = selectedCharacter
+    if (selectedCharacter.length > 0) {
+      const {supportPairs} = this.state
+      const updatedSupportPairs = supportPairs.slice()
+      const [selectedChar1, selectedChar2] = selectedCharacter
 
-    updatedSupportPairs[targetIdx].pairId = [selectedChar1.id, selectedChar2.id]
+      updatedSupportPairs[targetIdx].pairId = [selectedChar1.id, selectedChar2.id]
 
-    this.setState({
-      supportPairs: updatedSupportPairs,
-    })
+      this.setState({
+        supportPairs: updatedSupportPairs,
+        selectingPairIdx: undefined,
+      })
+    } else {
+      this.setState({
+        selectingPairIdx: undefined,
+      })
+    }
   }
 
   handlePairPointChange(point: number, targetPairIdx: number): void {
@@ -247,6 +254,30 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     }
   }
 
+  renderCharacterSelector(selectingPairIdx: number): JSX.Element | null {
+    const {state, props, handlePairSelect} = this
+    const {characters, relation} = props
+    const {supportPairs} = state
+    const selectedCharacters = characters.filter(character => supportPairs[selectingPairIdx].pairId.includes(character.id))
+    const otherSelectedIdSet = supportPairs.map(pair => {
+      return pair.pairId
+    })
+
+    otherSelectedIdSet.splice(selectingPairIdx, 1)
+    return (
+      <CharacterSelector
+        characters={characters}
+        targetIdx={selectingPairIdx}
+        relation={relation}
+        max={2}
+        otherSelectedIdSet={otherSelectedIdSet}
+        selectedCharacters={selectedCharacters}
+        isSkillActive={false}
+        onSelect={handlePairSelect}
+      />
+    )
+  }
+
   isValidate(): boolean {
     const {maxLength, minLength = maxLength, maxTotalPoint} = this.props
     const {supportPairs, totalPoint} = this.state
@@ -263,12 +294,10 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
   }
 
   render(): JSX.Element {
-    const {state, props, isValidate, handleConfirmBtnClick, handlePairSelect} = this
-    const {maxLength, characters, relation} = props
-    const {totalPoint, selectingPairIdx, supportPairs} = state
+    const {props, state, isValidate, handleConfirmBtnClick, renderCharacterSelector} = this
+    const {maxLength} = props
+    const {selectingPairIdx} = state
     const characterSupportPointElem: JSX.Element | null = this.createCharacterSupportPointTotal()
-
-    const selectedCharacters = characters.filter(character => supportPairs[selectingPairIdx].pairId.includes(character.id))
 
     const listItems: JSX.Element[] = []
 
@@ -276,37 +305,29 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
       listItems.push(this.createCharSelector(i))
     }
 
-    const otherSelectedIdSet = supportPairs.map(pair => {
-      return pair.pairId
-    })
-    otherSelectedIdSet.splice(selectingPairIdx, 1)
-
     return (
-      <div className={createClassName('pair-selector')}>
-        <div className={createClassName('pair-selector', 'box')}>
-          total: {totalPoint}
-          <div className={createClassName('pair-selector', 'pair-content')}>
-            <ul>
-              {listItems}
-            </ul>
-          </div>
+      <>
+        {
+          selectingPairIdx !== undefined ? (
+            renderCharacterSelector(selectingPairIdx)
+          ) : (
+            <Dialog title={'支援するペアを選択してください'} positiveTxt={'確定'} onPositiveFunc={isValidate() ? handleConfirmBtnClick : undefined}>
+              <div className={createClassName('pair-selector')}>
+                <div className={createClassName('pair-selector', 'box')}>
+                  {/* total: {totalPoint} */}
+                  <div className={createClassName('pair-selector', 'pair-content')}>
+                    <ul>
+                      {listItems}
+                    </ul>
+                  </div>
 
-          <CharacterSelector
-            characters={characters}
-            targetIdx={selectingPairIdx}
-            relation={relation}
-            max={2}
-            otherSelectedIdSet={otherSelectedIdSet}
-            selectedCharacters={selectedCharacters}
-            isSkillActive={false}
-            onSelect={handlePairSelect}
-          />
-
-          {characterSupportPointElem}
-
-          <Button modifire={'primary'} onClick={handleConfirmBtnClick} isDisabled={isValidate()}>確定</Button>
-        </div>
-      </div>
+                  {characterSupportPointElem}
+                </div>
+              </div>
+            </Dialog>
+          )
+        }
+      </>
     )
   }
 }

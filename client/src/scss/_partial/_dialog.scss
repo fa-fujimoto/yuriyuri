@@ -29,9 +29,9 @@
   &__box {
     display: inline-block;
     background-color: $dialog-background-color;
-    border: $border-width solid $dialog-border-color;
+    border: $border-width solid #ccc;
 
-    @include box-design(10px, 10px, $dialog-index, #ccc);
+    @include box-design(15px, 10px, $dialog-index, #ccc);
   }
 
   &__header {

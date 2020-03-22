@@ -4,16 +4,13 @@
   $borderWidth: 24px;
   $iconSize: 100px;
   $listSpace: 24px;
-  $itemSpace: 24px;
-  $columnNum: 5;
-  $boxSize: ($iconSize * $columnNum + $itemSpace * ($columnNum - 1)) + $listSpace * 2 + $borderWidth * 2;
+  $itemSpace: 16px;
+  $columnNum: 2;
+  $boxSize: ($iconSize * $columnNum + $itemSpace * ($columnNum - 1)) + $listSpace * 2;
 
-  width: $boxSize;
-  border: 1px solid $font-color;
-
-  &__select-area {
-    padding: $borderWidth;
-  }
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
 
   &__button-area {
     margin-top: 16px;
@@ -23,6 +20,8 @@
   &__list {
     @include box-design(8px, 8px, 5, #fff);
 
+    box-sizing: border-box;
+    width: $boxSize;
     background-color: #eee;
     padding: {
       top: $listSpace;
@@ -41,7 +40,7 @@
   }
 
   &__viewer {
-    height: 580px;
-    padding: 0 8px;
+    width: 510px;
+    padding-left: 24px;
   }
 }

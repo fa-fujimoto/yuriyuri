@@ -1,10 +1,18 @@
 @import './color';
+@import './util';
 
 .pair-selector-item {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  background-color: #fafafa;
+  border: 1px solid transparent;
+
+  &--active {
+    @include box-design(10px, 5px, 1, #ccc);
+
+    background-color: #efefef;
+    border-color: #ccc;
+  }
 
   &__view-box {
     display: flex;

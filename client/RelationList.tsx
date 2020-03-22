@@ -19,7 +19,7 @@ const RelationList: FC<IRelationListProps> = ({character, characters, relation})
       targetCharacter ? (
         <li key={`relationList${character.id}${targetCharacter.id}`} className={createClassName('relation-list', 'item', targetCharacter.id)}>
           <div className={createClassName('relation-list', 'icon')}>
-            <CharacterIcon character={targetCharacter} modifire={['ss']} isSkillActive={false} />
+            <CharacterIcon character={targetCharacter} modifire={['sm']} isSkillActive={false} />
           </div>
 
           <div className={createClassName('relation-list', 'info')}>
@@ -60,7 +60,7 @@ const RelationList: FC<IRelationListProps> = ({character, characters, relation})
                   状況
                 </dt>
                 <dd className={createClassName('relation-list', 'info-value')}>
-                  {pair.isRelationship ? '交際中' : '交際なし'}
+                  {pair.isRelationship ? '交際中' : '友人'}
                 </dd>
               </dl>
             </div>
@@ -76,7 +76,7 @@ const RelationList: FC<IRelationListProps> = ({character, characters, relation})
                       誓いのキス
                     </dt>
                     <dd className={createClassName('relation-list', 'info-value')}>
-                      {`${pair.kissCount}`}
+                      {`${pair.kissCount}回`}
                     </dd>
                   </dl>
                 </div>

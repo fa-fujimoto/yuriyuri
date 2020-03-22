@@ -26,7 +26,7 @@ const PairSelectorItem: FC<IPairSelectorItemProps> = ({pair, value, maxValue, id
   }, [onValueChange])
 
   return (
-    <div className={createClassName('pair-selector-item')}>
+    <div className={createClassName('pair-selector-item', '', isHover ? 'active' : '')}>
       <div
         className={createClassName('pair-selector-item', 'view-box')}
         onMouseEnter={(): void => setIsHover(true)}
@@ -41,7 +41,7 @@ const PairSelectorItem: FC<IPairSelectorItemProps> = ({pair, value, maxValue, id
       </div>
 
       <div className={createClassName('pair-selector-item', 'input-box')}>
-        <label className={createClassName('pair-selector-item', 'value-label')} htmlFor={`pairSelectorPoint${idx}`}>支杴値</label>
+        <label className={createClassName('pair-selector-item', 'value-label')} htmlFor={`pairSelectorPoint${idx}`}>支援値</label>
         <input
           className={createClassName('pair-selector-item', 'value-input')}
           id={`pairSelectorPoint${idx}`}
