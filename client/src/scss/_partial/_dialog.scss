@@ -27,17 +27,17 @@
   background-color: $dialog-shade-color;
 
   &__box {
-    width: 500px;
+    display: inline-block;
     background-color: $dialog-background-color;
     border: $border-width solid $dialog-border-color;
-    border-radius: 10px 0 10px 0;
+
+    @include box-design(10px, 10px, $dialog-index, #ccc);
   }
 
   &__header {
     box-sizing: border-box;
     padding: $header-vertical-space 0;
     margin: 0 $base-horizontal-space;
-    border-bottom: $border-width solid $dialog-border-color;
   }
 
   &__title {
@@ -52,7 +52,7 @@
     padding: $body-vertical-space 0;
     margin: 0 $base-horizontal-space;
     line-height: $body-line-height;
-    border-bottom: $border-width solid $dialog-border-color;
+    border-top: $border-width solid $dialog-border-color;
   }
 
   &__content {
@@ -67,5 +67,6 @@
     justify-content: flex-end;
     padding: $base-vertical-space 0;
     margin: 0 $base-horizontal-space;
+    border-top: $border-width solid $dialog-border-color;
   }
 }

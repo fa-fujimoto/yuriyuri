@@ -4,7 +4,7 @@ import { createClassName } from './Util'
 interface IButton {
   modifire: string | string[]
   isDisabled?: boolean
-  onClick: () => void
+  onClick?: () => void
 }
 
 const Button: FC<IButton> = ({modifire, isDisabled, onClick, children}) => {

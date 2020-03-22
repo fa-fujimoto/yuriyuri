@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import createClassName from './util/createClassName'
 import Button from './Button'
 
@@ -8,21 +8,45 @@ interface IDialogProps {
   modifire?: string
   positiveTxt?: string
   negativeTxt?: string
+  dangerTxt?: string
   onPositiveFunc?: () => void
   onNegativeFunc?: () => void
+  onDangerFunc?: () => void
 }
 
-const Dialog: FC<IDialogProps> = ({title, classNames = '', modifire = '', positiveTxt = 'OK', negativeTxt = 'Cancel', onPositiveFunc, onNegativeFunc, children}) => {
-  const positiveBtn = onPositiveFunc ? (
-    <Button modifire={'primary'} onClick={onPositiveFunc}>
-      {positiveTxt}
-    </Button>
-  ) : (null)
-  const negativeBtn = onNegativeFunc ? (
-    <Button modifire={'secondary'} onClick={onNegativeFunc}>
-      {negativeTxt}
-    </Button>
-  ) : (null)
+const Dialog: FC<IDialogProps> = ({
+  title,
+  classNames = '',
+  modifire = '',
+  positiveTxt,
+  negativeTxt,
+  dangerTxt,
+  onPositiveFunc,
+  onNegativeFunc,
+  onDangerFunc,
+  children,
+}) => {
+  const positiveBtn = useMemo(() => {
+    return positiveTxt ? (
+      <Button modifire={'primary'} onClick={onPositiveFunc} isDisabled={onPositiveFunc === undefined}>
+        {positiveTxt}
+      </Button>
+    ) : null
+  }, [positiveTxt, onPositiveFunc])
+  const negativeBtn = useMemo(() => {
+    return negativeTxt ? (
+      <Button modifire={'secondary'} onClick={onNegativeFunc} isDisabled={onNegativeFunc === undefined}>
+        {negativeTxt}
+      </Button>
+    ) : null
+  }, [negativeTxt, onNegativeFunc])
+  const dangerBtn = useMemo(() => {
+    return dangerTxt ? (
+      <Button modifire={'danger'} onClick={onDangerFunc} isDisabled={onDangerFunc === undefined}>
+        {dangerTxt}
+      </Button>
+    ) : null
+  }, [dangerTxt, onDangerFunc])
 
   const createDialogClass = (element?: string, modifire?: string): string => {
     return createClassName(`dialog ${classNames}`, element, modifire)
@@ -43,12 +67,17 @@ const Dialog: FC<IDialogProps> = ({title, classNames = '', modifire = '', positi
           </div>
         </section>
 
-        <footer className={createDialogClass('footer')}>
-          <div className={createDialogClass('btn-group')}>
-            {positiveBtn}
-            {negativeBtn}
-          </div>
-        </footer>
+        {
+          positiveBtn || negativeBtn || dangerBtn ? (
+            <footer className={createDialogClass('footer')}>
+              <div className={createDialogClass('btn-group')}>
+                {positiveBtn}
+                {negativeBtn}
+                {dangerBtn}
+              </div>
+            </footer>
+          ) : null
+        }
       </div>
     </div>
   )
