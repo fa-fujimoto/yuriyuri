@@ -24,7 +24,9 @@ const Button: FC<IButton> = ({modifire, isDisabled, onClick, children}) => {
       onMouseEnter={(): void => isDisabled ? setIsActive(false) : setIsActive(true)}
       onMouseLeave={(): void => isDisabled ? setIsActive(false) : setIsActive(false)}
     >
-      {children}
+      <div className={createClassName('button', 'inner')}>
+        {children}
+      </div>
     </div>
   )
 }

@@ -181,16 +181,12 @@
     }
   }
 
-  &__graph-content {
-    padding: 0 24px;
-  }
-
   &__icon {
     padding-right: 16px;
   }
 
   &__skill {
-    width: $skill-card-middle-size;
+    width: $skill-card-md-size;
     padding-right: 16px;
 
     &-list {

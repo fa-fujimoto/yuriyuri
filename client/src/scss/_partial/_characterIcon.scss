@@ -1,4 +1,5 @@
 @import './color';
+@import './size';
 @import './util';
 @import './z-index';
 
@@ -32,11 +33,11 @@
 .character-icon {
   $wrapper: &;
 
+  @include square($character-icon-md-size);
+
   position: relative;
   box-sizing: border-box;
-  width: 150px;
-  height: 150px;
-  padding: 5px;
+  padding: $character-icon-border-md-size;
   overflow: hidden;
   border: 1px solid #aaa;
   border-radius: 3% 0 3% 0;
@@ -52,9 +53,9 @@
   }
 
   &--lg {
-    width: 220px;
-    height: 220px;
-    padding: 10px;
+    @include square($character-icon-lg-size);
+
+    padding: $character-icon-border-lg-size;
 
     & #{$wrapper} {
       &__inner {
@@ -80,9 +81,9 @@
   }
 
   &--sm {
-    width: 100px;
-    height: 100px;
-    padding: 2px;
+    @include square($character-icon-sm-size);
+
+    padding: $character-icon-border-sm-size;
 
     & #{$wrapper} {
       &__inner {
@@ -119,9 +120,9 @@
   }
 
   &--ss {
-    width: 56px;
-    height: 56px;
-    padding: 2px;
+    @include square($character-icon-ss-size);
+
+    padding: $character-icon-border-ss-size;
 
     & #{$wrapper} {
       &__inner {
