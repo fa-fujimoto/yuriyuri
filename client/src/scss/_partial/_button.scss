@@ -3,7 +3,7 @@
 
 @mixin btn-design($normal-color, $active-color, $disabled-color) {
   color: $normal-color;
-  background-color: #fff;
+  background-color: $base-background-color;
   border-color: $normal-color;
 
   &::before {
@@ -17,7 +17,7 @@
   }
 
   &.active:not(.disabled) {
-    color: #fff;
+    color: $base-background-color;
     background-color: $active-color;
     border-color: $active-color;
 
@@ -29,7 +29,6 @@
 
   &.disabled {
     color: $disabled-color;
-    background-color: #eee;
     border-color: $disabled-color;
 
     &::before {

@@ -1,3 +1,43 @@
 @import './color';
+@import './size';
 @import './util';
 @import './z-index';
+
+.pair-selector {
+  width: $pair-selector-list-width;
+  padding: 8px 16px;
+
+  &__lead-text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: $font-color;
+  }
+
+  &__total-point {
+    margin-top: 8px;
+  }
+
+  &__select-area {
+    display: flex;
+    width: $pair-selector-list-width;
+    margin-top: 16px;
+  }
+
+  &__list {
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    max-width: $pair-selector-list-width;
+    border-top: $pair-selector-list-border-width solid $white-border-color;
+    border-left: $pair-selector-list-border-width solid $white-border-color;
+  }
+
+  &__item {
+    box-sizing: border-box;
+    width: $pair-selector-list-item-width;
+    border-right: $pair-selector-list-border-width solid $white-border-color;
+    border-bottom: $pair-selector-list-border-width solid $white-border-color;
+  }
+}

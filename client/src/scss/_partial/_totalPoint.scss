@@ -1,0 +1,28 @@
+@import './color';
+
+.total-point {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: $font-color;
+
+  &__label {
+    font-size: 14px;
+
+    &::after {
+      display: inline-block;
+      width: 0.5em;
+      padding-right: 0.5em;
+      text-align: center;
+      content: ':';
+    }
+  }
+
+  &__value {
+    font-size: 18px;
+
+    &--invalid {
+      color: $error-color;
+    }
+  }
+}

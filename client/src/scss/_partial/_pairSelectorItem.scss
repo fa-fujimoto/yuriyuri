@@ -1,40 +1,53 @@
 @import './color';
 @import './util';
+@import './size';
 
 .pair-selector-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  border: 1px solid transparent;
+  justify-content: center;
+
+  @include box-design(10px, 0, 1, $white-border-color);
 
   &--active {
-    @include box-design(10px, 5px, 1, #ccc);
-
-    background-color: #efefef;
-    border-color: #ccc;
+    background-color: $base-background-color-active;
   }
 
   &__view-box {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding: 16px 24px;
+    justify-content: center;
+    padding: {
+      top: $pair-selector-item-around-space-size;
+      right: $pair-selector-item-around-space-size;
+      bottom: $pair-selector-item-around-space-size - 8px;
+      left: $pair-selector-item-around-space-size;
+    }
 
     & > *:not(:last-child) {
-      margin-right: 24px;
+      margin-right: $pair-selector-item-between-space-size;
     }
   }
 
   &__cross-icon {
     display: inline-block;
-    width: 50px;
-    font-size: 50px;
-    color: #666;
+    width: $pair-selector-item-relation-icon-size;
+    font-size: $pair-selector-item-relation-icon-size;
+    color: #aaa;
   }
 
   &__input-box {
-    padding: 30px 24px;
-    border-left: 1px solid #666;
+    display: inline-block;
+    padding: {
+      top: $pair-selector-item-around-space-size - 8px;
+      right: $pair-selector-item-around-space-size;
+      bottom: $pair-selector-item-around-space-size;
+      left: $pair-selector-item-around-space-size;
+    }
+
+    text-align: center;
+    border-top: 1px solid $divider-border-color;
   }
 
   &__value-label,
