@@ -5,10 +5,20 @@ $btn-sm-size: 31px;
 
 $character-icon-lg-size: 220px;
 $character-icon-md-size: 150px;
-$character-icon-sm-size: 100px;
+$character-icon-sm-size: 90px;
 $character-icon-ss-size: 56px;
 
 $character-icon-border-lg-size: 10px;
 $character-icon-border-md-size: 5px;
 $character-icon-border-sm-size: 2px;
 $character-icon-border-ss-size: 2px;
+
+$pair-selector-item-around-space-size: 20px;
+$pair-selector-item-between-space-size: 16px;
+$pair-selector-item-character-icon-size: $character-icon-sm-size;
+$pair-selector-item-relation-icon-size: 40px;
+$pair-selector-item-width: ($pair-selector-item-around-space-size * 2) + ($pair-selector-item-between-space-size * 2) + ($pair-selector-item-character-icon-size * 2) + $pair-selector-item-relation-icon-size;
+
+$pair-selector-list-border-width: 1px;
+$pair-selector-list-item-width: $pair-selector-item-width + $pair-selector-list-border-width;
+$pair-selector-list-width: ($pair-selector-list-item-width * 3) + $pair-selector-list-border-width;

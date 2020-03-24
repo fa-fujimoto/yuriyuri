@@ -1,10 +1,21 @@
 $font-color: #333;
 $border-color: #aaa;
+$error-color: #f47a7a;
+
+$white-border-color: #ccc;
+$divider-border-color: #aaa;
+
+$gray-box-bg: #eee;
 $base-background-color: #fff;
+$base-background-color-active: #efefef;
 $dialog-shade-color: rgba(#000, 0.5);
 $dialog-background-color: #fff;
 $dialog-border-color: #707070;
 $dialog-font-color: $font-color;
+
+$character-icon-active-shade-color: rgba(#000, 0.2);
+$character-icon-disabled-shade-color: rgba(#666, 0.5);
+$character-icon-selecting-shade-color: rgba(#5dffa8, 0.6);
 
 $character-main-black-color: #333;
 $character-main-gray-color: #7a7a7a;

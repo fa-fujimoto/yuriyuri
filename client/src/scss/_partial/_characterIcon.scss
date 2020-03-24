@@ -39,7 +39,7 @@
   box-sizing: border-box;
   padding: $character-icon-border-md-size;
   overflow: hidden;
-  border: 1px solid #aaa;
+  border: 1px solid $white-border-color;
   border-radius: 3% 0 3% 0;
 
   &::after {
@@ -95,18 +95,7 @@
 
       &__last-name,
       &__first-name {
-        padding: 2px;
-        font-size: 12px;
-      }
-
-      &__last-name {
-        top: 3px;
-        left: 3px;
-      }
-
-      &__first-name {
-        right: 3px;
-        bottom: 3px;
+        display: none;
       }
 
       &__label {
@@ -114,7 +103,7 @@
       }
 
       &__empty-box {
-        font-size: 20px;
+        font-size: 16px;
       }
     }
   }
@@ -149,13 +138,13 @@
 
   &--active {
     &::after {
-      background-color: rgba(#000, 0.2);
+      background-color: $character-icon-active-shade-color;
     }
   }
 
   &--disabled {
     &::after {
-      background-color: rgba(#666, 0.5);
+      background-color: $character-icon-disabled-shade-color;
     }
   }
 
@@ -168,7 +157,7 @@
   &--selecting {
     & #{$wrapper}__label {
       color: rgba(#fff, 0.7);
-      background-color: rgba(#5dffa8, 0.6);
+      background-color: $character-icon-selecting-shade-color;
     }
   }
 

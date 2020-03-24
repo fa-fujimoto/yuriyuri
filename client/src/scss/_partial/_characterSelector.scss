@@ -1,8 +1,10 @@
+@import 'color';
 @import './util';
+@import './size';
 
 .character-selector {
   $borderWidth: 24px;
-  $iconSize: 100px;
+  $iconSize: $character-icon-sm-size;
   $listSpace: 24px;
   $itemSpace: 16px;
   $columnNum: 2;
@@ -18,11 +20,11 @@
   }
 
   &__list {
-    @include box-design(8px, 8px, 5, #fff);
+    @include box-design(8px, 8px, 5, $base-background-color);
 
     box-sizing: border-box;
     width: $boxSize;
-    background-color: #eee;
+    background-color: $gray-box-bg;
     padding: {
       top: $listSpace;
       right: $listSpace - $itemSpace;

@@ -4,6 +4,7 @@ import { ICharacter, CharacterCollection, CharacterId, IRelation } from './types
 import PairSelectorItem from './PairSelectorItem'
 import CharacterSelector from './CharacterSelector'
 import Dialog from './Dialog'
+import TotalPoint from './TotalPoint'
 
 interface IPairSelectorProps {
   characters: ICharacter[]
@@ -56,7 +57,7 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     this.state = {
       supportPairs,
       excludeList: [],
-      totalPoint: defaultValue.length > 0 ? defaultValue.reduce((result, value): number => { return result + value }) : 0,
+      totalPoint: 0,
       characterSupportPoint: Object.assign({}, characterSupportPoint),
     }
 
@@ -69,24 +70,41 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     this.isValidate = this.isValidate.bind(this)
   }
 
+  calcSupportPoint(): {newTotalPoint: number, newCharacterSupportPoint: CharacterCollection<number>} {
+    const {characterSupportPoint} = this.props
+    const {supportPairs} = this.state
+    const newCharacterSupportPoint = Object.assign({}, characterSupportPoint)
+    let newTotalPoint = 0
+
+    for (const pair of supportPairs) {
+      if (pair.pairId.length === 2) {
+        const {pairPoint, pairId} = pair
+        const [id1, id2] = pairId
+        newTotalPoint += pairPoint
+
+        newCharacterSupportPoint[id1] += pairPoint
+        newCharacterSupportPoint[id2] += pairPoint
+      }
+    }
+
+    return {newTotalPoint, newCharacterSupportPoint}
+  }
+
   handlePairIconClick(selectingPairIdx: number, selectId: CharacterId): void {
-    const {supportPairs, characterSupportPoint} = this.state
+    const {supportPairs} = this.state
     const pairId = supportPairs[selectingPairIdx].pairId.slice()
     const targetIdx = pairId.findIndex(id => id === selectId)
 
     if (targetIdx >= 0) {
       pairId.splice(targetIdx, 1)
-      characterSupportPoint[selectId] -= supportPairs[selectingPairIdx].pairPoint
     } else if (pairId.length < 2) {
       pairId.push(selectId)
-      characterSupportPoint[selectId] += supportPairs[selectingPairIdx].pairPoint
     }
 
     supportPairs[selectingPairIdx].pairId = pairId
 
     this.setState({
       supportPairs,
-      characterSupportPoint,
     })
   }
 
@@ -116,25 +134,16 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
   }
 
   handlePairPointChange(point: number, targetPairIdx: number): void {
-    const {supportPairs, totalPoint, characterSupportPoint} = this.state
-    const updatedPairs = Object.assign({}, supportPairs)
-    const updatedCharacterSupportPoint = Object.assign({}, characterSupportPoint)
+    const {supportPairs} = this.state
+    const updatedPairs = supportPairs.slice()
     const targetPair = updatedPairs[targetPairIdx]
-    const {pairId} = targetPair
-    const [charId1, charId2] = pairId
-
-    const diff = point - targetPair.pairPoint
 
     targetPair.pairPoint = point
 
     updatedPairs[targetPairIdx] = targetPair
-    updatedCharacterSupportPoint[charId1] += diff
-    updatedCharacterSupportPoint[charId2] += diff
 
     this.setState({
-      totalPoint: totalPoint + diff,
-      supportPairs,
-      characterSupportPoint: updatedCharacterSupportPoint,
+      supportPairs: updatedPairs,
     })
   }
 
@@ -208,7 +217,7 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     const char2 = characters.find(character => character.id === charId2)
 
     return (
-      <li key={`pairSelectorListItem${targetPairIdx}`}>
+      <li className={createClassName('pair-selector', 'item')} key={`pairSelectorListItem${targetPairIdx}`}>
         <PairSelectorItem
           pair={[char1, char2]}
           idx={targetPairIdx}
@@ -293,10 +302,22 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     )
   }
 
+  componentDidUpdate(prevProps: IPairSelectorProps, prevState: IPairSelectorState): void {
+    const {supportPairs} = this.state
+
+    if (supportPairs !== prevState.supportPairs) {
+      const {newTotalPoint, newCharacterSupportPoint} = this.calcSupportPoint()
+      this.setState({
+        totalPoint: newTotalPoint,
+        characterSupportPoint: newCharacterSupportPoint,
+      })
+    }
+  }
+
   render(): JSX.Element {
     const {props, state, isValidate, handleConfirmBtnClick, renderCharacterSelector} = this
-    const {maxLength} = props
-    const {selectingPairIdx} = state
+    const {maxLength, minLength, maxPoint, maxTotalPoint} = props
+    const {selectingPairIdx, totalPoint} = state
     const characterSupportPointElem: JSX.Element | null = this.createCharacterSupportPointTotal()
 
     const listItems: JSX.Element[] = []
@@ -313,16 +334,24 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
           ) : (
             <Dialog title={'支援するペアを選択してください'} positiveTxt={'確定'} onPositiveFunc={isValidate() ? handleConfirmBtnClick : undefined}>
               <div className={createClassName('pair-selector')}>
-                <div className={createClassName('pair-selector', 'box')}>
-                  {/* total: {totalPoint} */}
-                  <div className={createClassName('pair-selector', 'pair-content')}>
-                    <ul>
-                      {listItems}
-                    </ul>
+                <div className={createClassName('pair-selector', 'description')}>
+                  <p className={createClassName('pair-selector', 'lead-text')}>
+                    {`推したいペアを${minLength !== undefined ? `${minLength}〜${maxLength}` : maxLength}組選び、${maxPoint > 1 ? `それぞれに1〜${maxPoint}` : `${maxPoint}`}点を割り振ってください。数値が高いほど推していることを表現します。`}<br/>
+                    {`割り振られた値が各キャラクターの支援点となります。この支援点はキャラクターのコントロール権を取得するために必要となります。`}<br />
+                    {`支援点の合計は常に${maxTotalPoint}点となります。`}
+                  </p>
+                  <div className={createClassName('pair-selector', 'total-point')}>
+                    <TotalPoint maxTotalPoint={maxTotalPoint} currentTotalPoint={totalPoint} />
                   </div>
-
-                  {characterSupportPointElem}
                 </div>
+
+                <div className={createClassName('pair-selector', 'select-area')}>
+                  <ul className={createClassName('pair-selector', 'list')}>
+                    {listItems}
+                  </ul>
+                </div>
+
+                {characterSupportPointElem}
               </div>
             </Dialog>
           )
