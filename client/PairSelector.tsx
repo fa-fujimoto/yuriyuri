@@ -5,6 +5,7 @@ import PairSelectorItem from './PairSelectorItem'
 import CharacterSelector from './CharacterSelector'
 import Dialog from './Dialog'
 import TotalPoint from './TotalPoint'
+import CharacterSupportPoint from './CharacterSupportPoint'
 
 interface IPairSelectorProps {
   characters: ICharacter[]
@@ -32,7 +33,7 @@ interface IPairSelectorState {
   excludeList: CharacterId[]
   totalPoint: number
   selectingPairIdx?: number
-  characterSupportPoint: CharacterCollection<number>
+  nextCharacterSupportPoint: CharacterCollection<number>
 }
 
 class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
@@ -58,11 +59,10 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
       supportPairs,
       excludeList: [],
       totalPoint: 0,
-      characterSupportPoint: Object.assign({}, characterSupportPoint),
+      nextCharacterSupportPoint: Object.assign({}, characterSupportPoint),
     }
 
     this.handlePairPointChange = this.handlePairPointChange.bind(this)
-    this.handlePairIconClick = this.handlePairIconClick.bind(this)
     this.handlePairSelectClick = this.handlePairSelectClick.bind(this)
     this.handlePairSelect = this.handlePairSelect.bind(this)
     this.handleConfirmBtnClick = this.handleConfirmBtnClick.bind(this)
@@ -88,24 +88,6 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     }
 
     return {newTotalPoint, newCharacterSupportPoint}
-  }
-
-  handlePairIconClick(selectingPairIdx: number, selectId: CharacterId): void {
-    const {supportPairs} = this.state
-    const pairId = supportPairs[selectingPairIdx].pairId.slice()
-    const targetIdx = pairId.findIndex(id => id === selectId)
-
-    if (targetIdx >= 0) {
-      pairId.splice(targetIdx, 1)
-    } else if (pairId.length < 2) {
-      pairId.push(selectId)
-    }
-
-    supportPairs[selectingPairIdx].pairId = pairId
-
-    this.setState({
-      supportPairs,
-    })
   }
 
   handlePairSelectClick(targetPairIdx: number): void {
@@ -149,7 +131,7 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
 
   handleConfirmBtnClick(): void {
     const {state, props} = this
-    const {supportPairs, characterSupportPoint} = state
+    const {supportPairs, nextCharacterSupportPoint} = state
     const {handlePairConfirm} = props
 
     const updatedSupportPairs: {
@@ -165,44 +147,7 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
       })
     }
 
-    handlePairConfirm(updatedSupportPairs, characterSupportPoint)
-  }
-
-  createPairSelectList(targetPairIdx: number, pairId: CharacterId[], excludeList: CharacterId[]): JSX.Element {
-    const {handlePairIconClick, props} = this
-    const {characters} = props
-
-    const selectListItems: JSX.Element[] = characters.map(character => {
-      const selectIdx = pairId.findIndex(id => id === character.id)
-      const disableIdx = excludeList.findIndex(id => id === character.id)
-
-      const defaultStyle: React.CSSProperties = {display: 'inline-block', padding: '5px'}
-      const style: React.CSSProperties = selectIdx >= 0 ? {backgroundColor: 'blue'} : {}
-
-
-      if (selectIdx < 0 && disableIdx >= 0) {
-        return (
-          <li style={Object.assign(defaultStyle, {backgroundColor: '#eee'})}>
-            <img src={character.iconSrc} width="100" style={{opacity: '.5'}} />
-          </li>
-        )
-      } else {
-        return (
-          <li
-            style={Object.assign(defaultStyle, style)}
-            onClick={(): void => handlePairIconClick(targetPairIdx, character.id)}
-          >
-            <img src={character.iconSrc} width="100" />
-          </li>
-        )
-      }
-    })
-
-    return (
-      <ul>
-        {selectListItems}
-      </ul>
-    )
+    handlePairConfirm(updatedSupportPairs, nextCharacterSupportPoint)
   }
 
   createCharSelector(targetPairIdx: number): JSX.Element {
@@ -229,38 +174,6 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
         />
       </li>
     )
-  }
-
-  createCharacterSupportPointTotal(): JSX.Element | null {
-    const {characters} = this.props
-    const {characterSupportPoint} = this.state
-    let isRender = false
-
-    const listItem: (JSX.Element | null)[] = characters.map((character): JSX.Element | null => {
-      const point = characterSupportPoint[character.id]
-
-      if (point > 0) {
-        if (!isRender) isRender = true
-        return (
-          <li style={{display: 'inline-block'}}>
-            <img src={character.iconSrc} width='100' />
-            <span>{point}</span>
-          </li>
-        )
-      } else {
-        return null
-      }
-    })
-
-    if (isRender) {
-      return (
-        <ul>
-          {listItem}
-        </ul>
-      )
-    } else {
-      return null
-    }
   }
 
   renderCharacterSelector(selectingPairIdx: number): JSX.Element | null {
@@ -309,16 +222,15 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
       const {newTotalPoint, newCharacterSupportPoint} = this.calcSupportPoint()
       this.setState({
         totalPoint: newTotalPoint,
-        characterSupportPoint: newCharacterSupportPoint,
+        nextCharacterSupportPoint: newCharacterSupportPoint,
       })
     }
   }
 
   render(): JSX.Element {
     const {props, state, isValidate, handleConfirmBtnClick, renderCharacterSelector} = this
-    const {maxLength, minLength, maxPoint, maxTotalPoint} = props
-    const {selectingPairIdx, totalPoint} = state
-    const characterSupportPointElem: JSX.Element | null = this.createCharacterSupportPointTotal()
+    const {maxLength, minLength, maxPoint, maxTotalPoint, characters, characterSupportPoint} = props
+    const {selectingPairIdx, totalPoint, nextCharacterSupportPoint} = state
 
     const listItems: JSX.Element[] = []
 
@@ -351,7 +263,14 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
                   </ul>
                 </div>
 
-                {characterSupportPointElem}
+                <div className={createClassName('pair-selector', 'result-area')}>
+                  <CharacterSupportPoint
+                    characters={characters}
+                    characterSupportPoint={characterSupportPoint}
+                    nextCharacterSupportPoint={nextCharacterSupportPoint}
+                    onIconClick={(character) => console.log(character)}
+                  />
+                </div>
               </div>
             </Dialog>
           )
