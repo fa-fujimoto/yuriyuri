@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC } from 'react'
 import { ICharacter, CharacterCollection } from './types/type'
 import { createClassName } from './Util'
 import CharacterIcon from './CharacterIcon'
