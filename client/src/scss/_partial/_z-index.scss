@@ -1,3 +1,9 @@
+$character-icon-index: 1;
+$character-icon-label-index: $character-icon-index + 1;
+$character-icon-triangle-index: $character-icon-index + 2;
+$character-icon-shade-index: $character-icon-index + 3;
+$character-icon-max-index: max($character-icon-label-index, $character-icon-triangle-index, $character-icon-shade-index);
+
 $relation-characters-index: 20;
 $relation-line-index: 30;
 $relation-chacter-active-index: 35;

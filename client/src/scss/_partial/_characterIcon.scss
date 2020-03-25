@@ -45,7 +45,7 @@
   &::after {
     @include centerize();
 
-    z-index: 5;
+    z-index: $character-icon-shade-index;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -219,7 +219,7 @@
     &::before,
     &::after {
       position: absolute;
-      z-index: 3;
+      z-index: $character-icon-triangle-index;
       width: 0;
       height: 0;
       margin: auto;
@@ -269,7 +269,7 @@
   &__empty-box {
     @include centerize();
 
-    z-index: 1;
+    z-index: $character-icon-label-index;
     display: flex;
     align-items: center;
     justify-content: center;

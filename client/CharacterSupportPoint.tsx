@@ -16,15 +16,12 @@ const CharacterSupportPoint: FC<ICharacterSupportPointProps> = ({
   nextCharacterSupportPoint,
   onIconClick,
 }) => {
-  const sortedCharacters = useMemo(() => {
-    const sortingCharacters = characters.slice()
-    return sortingCharacters.sort((character1, character2) => {
-      const point1 = nextCharacterSupportPoint[character1.id]
-      const point2 = nextCharacterSupportPoint[character2.id]
+  const sortedCharacters = characters.slice().sort((character1, character2) => {
+    const point1 = nextCharacterSupportPoint[character1.id]
+    const point2 = nextCharacterSupportPoint[character2.id]
 
-      return point2 - point1
-    })
-  }, [nextCharacterSupportPoint])
+    return point2 - point1
+  })
   const listItem: (JSX.Element | null)[] = characters.map(character => {
     const sortOrder = sortedCharacters.findIndex(sortedCharacter => sortedCharacter.id === character.id)
     const nextSupportPoint = nextCharacterSupportPoint[character.id]
@@ -44,7 +41,7 @@ const CharacterSupportPoint: FC<ICharacterSupportPointProps> = ({
           <CharacterIcon character={character} modifire={['ss']} isSkillActive={false} onClick={onIconClick} />
         </div>
 
-        <div className={createClassName('character-support-point', 'point-area', modifireName)}>
+        <div className={createClassName('character-support-point', 'point-area', [modifireName, character.id])}>
           {nextSupportPoint}
         </div>
       </li>
@@ -53,9 +50,11 @@ const CharacterSupportPoint: FC<ICharacterSupportPointProps> = ({
 
   return (
     listItem.some(item => item !== null) ? (
-      <ul className={createClassName('character-support-point')}>
-        {listItem}
-      </ul>
+      <div className={createClassName('character-support-point')}>
+        <ul className={createClassName('character-support-point', 'list')}>
+          {listItem}
+        </ul>
+      </div>
     ) : null
   )
 }

@@ -40,4 +40,8 @@
     border-right: $pair-selector-list-border-width solid $white-border-color;
     border-bottom: $pair-selector-list-border-width solid $white-border-color;
   }
+
+  &__result-area {
+    margin-top: 24px;
+  }
 }
