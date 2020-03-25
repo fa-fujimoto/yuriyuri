@@ -1,0 +1,83 @@
+@import './util';
+@import './color';
+@import './z-index';
+
+.character-support-point {
+  @include box-design(8px, 8px, 1, $base-background-color);
+
+  padding: 16px;
+  background-color: $gray-box-bg;
+
+  &__list {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
+
+  &__item {
+    position: relative;
+    display: inline-block;
+  }
+
+  &__point-area {
+    @include circle(14px);
+
+    position: absolute;
+    right: -0.5em;
+    bottom: -0.5em;
+    z-index: $character-icon-max-index + 1;
+    display: inline-block;
+    padding: 0.25em;
+    font-size: 14px;
+    line-height: 1;
+    color: $font-color;
+    text-align: center;
+    background: $base-background-color;
+    border: 2px solid transparent;
+    box-shadow: 1px 1px 3px rgba(#000, 0.5);
+
+    &--plus {
+      color: $positive-color;
+    }
+
+    &--minus {
+      color: $negative-color;
+    }
+
+    &--black {
+      border-color: $character-border-black-color;
+    }
+
+    &--gray {
+      border-color: $character-border-gray-color;
+    }
+
+    &--green {
+      border-color: $character-border-green-color;
+    }
+
+    &--pink {
+      border-color: $character-border-pink-color;
+    }
+
+    &--purple {
+      border-color: $character-border-purple-color;
+    }
+
+    &--red {
+      border-color: $character-border-red-color;
+    }
+
+    &--sky {
+      border-color: $character-border-sky-color;
+    }
+
+    &--white {
+      border-color: $character-border-white-color;
+    }
+
+    &--yellow {
+      border-color: $character-border-yellow-color;
+    }
+  }
+}

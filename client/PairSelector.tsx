@@ -5,6 +5,8 @@ import PairSelectorItem from './PairSelectorItem'
 import CharacterSelector from './CharacterSelector'
 import Dialog from './Dialog'
 import TotalPoint from './TotalPoint'
+import CharacterSupportPoint from './CharacterSupportPoint'
+import CharacterViewer from './CharacterViewer'
 
 interface IPairSelectorProps {
   characters: ICharacter[]
@@ -32,7 +34,9 @@ interface IPairSelectorState {
   excludeList: CharacterId[]
   totalPoint: number
   selectingPairIdx?: number
-  characterSupportPoint: CharacterCollection<number>
+  currentCharacter?: ICharacter
+  nextCharacterSupportPoint: CharacterCollection<number>
+  isConfirm: boolean
 }
 
 class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
@@ -58,13 +62,17 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
       supportPairs,
       excludeList: [],
       totalPoint: 0,
-      characterSupportPoint: Object.assign({}, characterSupportPoint),
+      nextCharacterSupportPoint: Object.assign({}, characterSupportPoint),
+      isConfirm: false,
     }
 
     this.handlePairPointChange = this.handlePairPointChange.bind(this)
-    this.handlePairIconClick = this.handlePairIconClick.bind(this)
     this.handlePairSelectClick = this.handlePairSelectClick.bind(this)
     this.handlePairSelect = this.handlePairSelect.bind(this)
+    this.handleCharacterViewerOpen = this.handleCharacterViewerOpen.bind(this)
+    this.handleCharacterViewerClose = this.handleCharacterViewerClose.bind(this)
+    this.handleConfirmDialogOpen = this.handleConfirmDialogOpen.bind(this)
+    this.handleConfirmDialogClose = this.handleConfirmDialogClose.bind(this)
     this.handleConfirmBtnClick = this.handleConfirmBtnClick.bind(this)
     this.renderCharacterSelector = this.renderCharacterSelector.bind(this)
     this.isValidate = this.isValidate.bind(this)
@@ -88,24 +96,6 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     }
 
     return {newTotalPoint, newCharacterSupportPoint}
-  }
-
-  handlePairIconClick(selectingPairIdx: number, selectId: CharacterId): void {
-    const {supportPairs} = this.state
-    const pairId = supportPairs[selectingPairIdx].pairId.slice()
-    const targetIdx = pairId.findIndex(id => id === selectId)
-
-    if (targetIdx >= 0) {
-      pairId.splice(targetIdx, 1)
-    } else if (pairId.length < 2) {
-      pairId.push(selectId)
-    }
-
-    supportPairs[selectingPairIdx].pairId = pairId
-
-    this.setState({
-      supportPairs,
-    })
   }
 
   handlePairSelectClick(targetPairIdx: number): void {
@@ -149,7 +139,7 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
 
   handleConfirmBtnClick(): void {
     const {state, props} = this
-    const {supportPairs, characterSupportPoint} = state
+    const {supportPairs, nextCharacterSupportPoint} = state
     const {handlePairConfirm} = props
 
     const updatedSupportPairs: {
@@ -165,44 +155,31 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
       })
     }
 
-    handlePairConfirm(updatedSupportPairs, characterSupportPoint)
+    handlePairConfirm(updatedSupportPairs, nextCharacterSupportPoint)
   }
 
-  createPairSelectList(targetPairIdx: number, pairId: CharacterId[], excludeList: CharacterId[]): JSX.Element {
-    const {handlePairIconClick, props} = this
-    const {characters} = props
-
-    const selectListItems: JSX.Element[] = characters.map(character => {
-      const selectIdx = pairId.findIndex(id => id === character.id)
-      const disableIdx = excludeList.findIndex(id => id === character.id)
-
-      const defaultStyle: React.CSSProperties = {display: 'inline-block', padding: '5px'}
-      const style: React.CSSProperties = selectIdx >= 0 ? {backgroundColor: 'blue'} : {}
-
-
-      if (selectIdx < 0 && disableIdx >= 0) {
-        return (
-          <li style={Object.assign(defaultStyle, {backgroundColor: '#eee'})}>
-            <img src={character.iconSrc} width="100" style={{opacity: '.5'}} />
-          </li>
-        )
-      } else {
-        return (
-          <li
-            style={Object.assign(defaultStyle, style)}
-            onClick={(): void => handlePairIconClick(targetPairIdx, character.id)}
-          >
-            <img src={character.iconSrc} width="100" />
-          </li>
-        )
-      }
+  handleCharacterViewerOpen(character?: ICharacter): void {
+    this.setState({
+      currentCharacter: character,
     })
+  }
 
-    return (
-      <ul>
-        {selectListItems}
-      </ul>
-    )
+  handleCharacterViewerClose(): void {
+    this.setState({
+      currentCharacter: undefined,
+    })
+  }
+
+  handleConfirmDialogOpen(): void {
+    this.setState({
+      isConfirm: true,
+    })
+  }
+
+  handleConfirmDialogClose(): void {
+    this.setState({
+      isConfirm: false,
+    })
   }
 
   createCharSelector(targetPairIdx: number): JSX.Element {
@@ -231,39 +208,7 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     )
   }
 
-  createCharacterSupportPointTotal(): JSX.Element | null {
-    const {characters} = this.props
-    const {characterSupportPoint} = this.state
-    let isRender = false
-
-    const listItem: (JSX.Element | null)[] = characters.map((character): JSX.Element | null => {
-      const point = characterSupportPoint[character.id]
-
-      if (point > 0) {
-        if (!isRender) isRender = true
-        return (
-          <li style={{display: 'inline-block'}}>
-            <img src={character.iconSrc} width='100' />
-            <span>{point}</span>
-          </li>
-        )
-      } else {
-        return null
-      }
-    })
-
-    if (isRender) {
-      return (
-        <ul>
-          {listItem}
-        </ul>
-      )
-    } else {
-      return null
-    }
-  }
-
-  renderCharacterSelector(selectingPairIdx: number): JSX.Element | null {
+  renderCharacterSelector(selectingPairIdx: number): JSX.Element {
     const {state, props, handlePairSelect} = this
     const {characters, relation} = props
     const {supportPairs} = state
@@ -309,16 +254,25 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
       const {newTotalPoint, newCharacterSupportPoint} = this.calcSupportPoint()
       this.setState({
         totalPoint: newTotalPoint,
-        characterSupportPoint: newCharacterSupportPoint,
+        nextCharacterSupportPoint: newCharacterSupportPoint,
       })
     }
   }
 
   render(): JSX.Element {
-    const {props, state, isValidate, handleConfirmBtnClick, renderCharacterSelector} = this
-    const {maxLength, minLength, maxPoint, maxTotalPoint} = props
-    const {selectingPairIdx, totalPoint} = state
-    const characterSupportPointElem: JSX.Element | null = this.createCharacterSupportPointTotal()
+    const {
+      props,
+      state,
+      isValidate,
+      handleCharacterViewerOpen,
+      handleCharacterViewerClose,
+      handleConfirmDialogOpen,
+      handleConfirmDialogClose,
+      handleConfirmBtnClick,
+      renderCharacterSelector,
+    } = this
+    const {maxLength, minLength, maxPoint, maxTotalPoint, characters, relation, characterSupportPoint} = props
+    const {selectingPairIdx, totalPoint, nextCharacterSupportPoint, currentCharacter, isConfirm} = state
 
     const listItems: JSX.Element[] = []
 
@@ -327,36 +281,65 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     }
 
     return (
-      <>
+      <Dialog title={'支援するペアを選択してください'} positiveTxt={'確定'} onPositiveFunc={isValidate() ? handleConfirmDialogOpen : undefined}>
+        <div className={createClassName('pair-selector')}>
+          <div className={createClassName('pair-selector', 'description')}>
+            <p className={createClassName('pair-selector', 'lead-text')}>
+              {`推したいペアを${minLength !== undefined ? `${minLength}〜${maxLength}` : maxLength}組選び、${maxPoint > 1 ? `それぞれに1〜${maxPoint}` : `${maxPoint}`}点を割り振ってください。数値が高いほど推していることを表現します。`}<br/>
+              {`割り振られた値が各キャラクターの支援点となります。この支援点はキャラクターのコントロール権を取得するために必要となります。`}<br />
+              {`支援点の合計は常に${maxTotalPoint}点となります。`}
+            </p>
+            <div className={createClassName('pair-selector', 'total-point')}>
+              <TotalPoint maxTotalPoint={maxTotalPoint} currentTotalPoint={totalPoint} />
+            </div>
+          </div>
+
+          <div className={createClassName('pair-selector', 'select-area')}>
+            <ul className={createClassName('pair-selector', 'list')}>
+              {listItems}
+            </ul>
+          </div>
+
+          <div className={createClassName('pair-selector', 'result-area')}>
+            <CharacterSupportPoint
+              characters={characters}
+              characterSupportPoint={characterSupportPoint}
+              nextCharacterSupportPoint={nextCharacterSupportPoint}
+              onIconClick={handleCharacterViewerOpen}
+            />
+          </div>
+        </div>
+
         {
           selectingPairIdx !== undefined ? (
             renderCharacterSelector(selectingPairIdx)
-          ) : (
-            <Dialog title={'支援するペアを選択してください'} positiveTxt={'確定'} onPositiveFunc={isValidate() ? handleConfirmBtnClick : undefined}>
-              <div className={createClassName('pair-selector')}>
-                <div className={createClassName('pair-selector', 'description')}>
-                  <p className={createClassName('pair-selector', 'lead-text')}>
-                    {`推したいペアを${minLength !== undefined ? `${minLength}〜${maxLength}` : maxLength}組選び、${maxPoint > 1 ? `それぞれに1〜${maxPoint}` : `${maxPoint}`}点を割り振ってください。数値が高いほど推していることを表現します。`}<br/>
-                    {`割り振られた値が各キャラクターの支援点となります。この支援点はキャラクターのコントロール権を取得するために必要となります。`}<br />
-                    {`支援点の合計は常に${maxTotalPoint}点となります。`}
-                  </p>
-                  <div className={createClassName('pair-selector', 'total-point')}>
-                    <TotalPoint maxTotalPoint={maxTotalPoint} currentTotalPoint={totalPoint} />
-                  </div>
-                </div>
-
-                <div className={createClassName('pair-selector', 'select-area')}>
-                  <ul className={createClassName('pair-selector', 'list')}>
-                    {listItems}
-                  </ul>
-                </div>
-
-                {characterSupportPointElem}
-              </div>
-            </Dialog>
-          )
+          ) : null
         }
-      </>
+
+        {
+          currentCharacter !== undefined ? (
+            <Dialog positiveTxt={'閉じる'} onPositiveFunc={handleCharacterViewerClose}>
+              <CharacterViewer characters={characters} character={currentCharacter} relation={relation} isSkillActive={false} />
+            </Dialog>
+          ) : null
+        }
+
+        {
+          isConfirm ? (
+            <Dialog
+              title={'確認'}
+              positiveTxt={'はい'}
+              negativeTxt={'いいえ'}
+              onPositiveFunc={handleConfirmBtnClick}
+              onNegativeFunc={handleConfirmDialogClose}
+            >
+              <p>
+                支援するペアを確定してよろしいですか？
+              </p>
+            </Dialog>
+          ) : null
+        }
+      </Dialog>
     )
   }
 }

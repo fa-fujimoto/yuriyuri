@@ -6,9 +6,8 @@
   }
 }
 
-@mixin box-design($size, $radius, $z-index, $before-color, $after-color: $before-color) {
-  position: relative;
-  overflow: hidden;
+@mixin box-design($size, $radius, $z-index, $before-color, $after-color: $before-color, $pos-type: relative) {
+  position: $pos-type;
   border-radius: $radius 0 $radius 0;
 
   &::before,
