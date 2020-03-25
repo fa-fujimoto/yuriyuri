@@ -27,17 +27,19 @@
   background-color: $dialog-shade-color;
 
   &__box {
+    @include box-design(15px, 10px, $dialog-index - 1, $white-border-color);
+
     display: inline-block;
+    overflow: visible;
     background-color: $dialog-background-color;
     border: $border-width solid $white-border-color;
-
-    @include box-design(15px, 10px, $dialog-index, $white-border-color);
   }
 
   &__header {
     box-sizing: border-box;
     padding: $header-vertical-space 0;
     margin: 0 $base-horizontal-space;
+    border-bottom: $border-width solid $divider-border-color;
   }
 
   &__title {
@@ -52,13 +54,16 @@
     padding: $body-vertical-space 0;
     margin: 0 $base-horizontal-space;
     line-height: $body-line-height;
-    border-top: $border-width solid $divider-border-color;
   }
 
   &__content {
     font-size: $body-font-size;
     line-height: $body-line-height;
     color: $dialog-font-color;
+
+    & > .dialog {
+      @include box-design(0, 10px, $dialog-index - 1, $white-border-color, $pos-type: absolute);
+    }
   }
 
   &__footer {

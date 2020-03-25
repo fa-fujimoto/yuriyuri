@@ -3,7 +3,7 @@ import createClassName from './util/createClassName'
 import Button from './Button'
 
 interface IDialogProps {
-  title: string
+  title?: string
   classNames?: string
   modifire?: string
   positiveTxt?: string
@@ -55,11 +55,15 @@ const Dialog: FC<IDialogProps> = ({
   return (
     <div className={createDialogClass('', modifire)}>
       <div className={createDialogClass('box')}>
-        <header className={createDialogClass('header')}>
-          <h2 className={createDialogClass('title')}>
-            {title}
-          </h2>
-        </header>
+        {
+          title !== undefined ? (
+            <header className={createDialogClass('header')}>
+              <h2 className={createDialogClass('title')}>
+                {title}
+              </h2>
+            </header>
+          ) : null
+        }
 
         <section className={createDialogClass('body')}>
           <div className={createDialogClass('content')}>
