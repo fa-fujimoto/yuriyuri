@@ -36,6 +36,7 @@ interface IPairSelectorState {
   selectingPairIdx?: number
   currentCharacter?: ICharacter
   nextCharacterSupportPoint: CharacterCollection<number>
+  isConfirm: boolean
 }
 
 class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
@@ -62,6 +63,7 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
       excludeList: [],
       totalPoint: 0,
       nextCharacterSupportPoint: Object.assign({}, characterSupportPoint),
+      isConfirm: false,
     }
 
     this.handlePairPointChange = this.handlePairPointChange.bind(this)
@@ -69,6 +71,8 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     this.handlePairSelect = this.handlePairSelect.bind(this)
     this.handleCharacterViewerOpen = this.handleCharacterViewerOpen.bind(this)
     this.handleCharacterViewerClose = this.handleCharacterViewerClose.bind(this)
+    this.handleConfirmDialogOpen = this.handleConfirmDialogOpen.bind(this)
+    this.handleConfirmDialogClose = this.handleConfirmDialogClose.bind(this)
     this.handleConfirmBtnClick = this.handleConfirmBtnClick.bind(this)
     this.renderCharacterSelector = this.renderCharacterSelector.bind(this)
     this.isValidate = this.isValidate.bind(this)
@@ -166,6 +170,18 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     })
   }
 
+  handleConfirmDialogOpen(): void {
+    this.setState({
+      isConfirm: true,
+    })
+  }
+
+  handleConfirmDialogClose(): void {
+    this.setState({
+      isConfirm: false,
+    })
+  }
+
   createCharSelector(targetPairIdx: number): JSX.Element {
     const {handlePairSelectClick, handlePairPointChange} = this
     const {characters, maxPoint} = this.props
@@ -250,11 +266,13 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
       isValidate,
       handleCharacterViewerOpen,
       handleCharacterViewerClose,
+      handleConfirmDialogOpen,
+      handleConfirmDialogClose,
       handleConfirmBtnClick,
       renderCharacterSelector,
     } = this
     const {maxLength, minLength, maxPoint, maxTotalPoint, characters, relation, characterSupportPoint} = props
-    const {selectingPairIdx, totalPoint, nextCharacterSupportPoint, currentCharacter} = state
+    const {selectingPairIdx, totalPoint, nextCharacterSupportPoint, currentCharacter, isConfirm} = state
 
     const listItems: JSX.Element[] = []
 
@@ -263,7 +281,7 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
     }
 
     return (
-      <Dialog title={'支援するペアを選択してください'} positiveTxt={'確定'} onPositiveFunc={isValidate() ? handleConfirmBtnClick : undefined}>
+      <Dialog title={'支援するペアを選択してください'} positiveTxt={'確定'} onPositiveFunc={isValidate() ? handleConfirmDialogOpen : undefined}>
         <div className={createClassName('pair-selector')}>
           <div className={createClassName('pair-selector', 'description')}>
             <p className={createClassName('pair-selector', 'lead-text')}>
@@ -302,6 +320,22 @@ class PairSelector extends Component<IPairSelectorProps, IPairSelectorState> {
           currentCharacter !== undefined ? (
             <Dialog positiveTxt={'閉じる'} onPositiveFunc={handleCharacterViewerClose}>
               <CharacterViewer characters={characters} character={currentCharacter} relation={relation} isSkillActive={false} />
+            </Dialog>
+          ) : null
+        }
+
+        {
+          isConfirm ? (
+            <Dialog
+              title={'確認'}
+              positiveTxt={'はい'}
+              negativeTxt={'いいえ'}
+              onPositiveFunc={handleConfirmBtnClick}
+              onNegativeFunc={handleConfirmDialogClose}
+            >
+              <p>
+                支援するペアを確定してよろしいですか？
+              </p>
             </Dialog>
           ) : null
         }
