@@ -36,7 +36,11 @@ const CharacterSupportPoint: FC<ICharacterSupportPointProps> = ({
     }
 
     return (
-      <li className={createClassName('character-support-point', 'item', character.id)} style={{order: sortOrder}}>
+      <li
+        className={createClassName('character-support-point', 'item', character.id)}
+        style={{order: sortOrder}}
+        key={`characterSupportPointItem${character.id}`}
+      >
         <div className={createClassName('character-support-point', 'icon-area')}>
           <CharacterIcon character={character} modifire={['ss']} isSkillActive={false} onClick={onIconClick} />
         </div>
