@@ -1,0 +1,56 @@
+@import './color';
+@import './util';
+@import './size';
+
+$member-name-list: (a, b, c, d, e, f);
+$member-color-list: (
+  $member-display-name-a,
+  $member-display-name-b,
+  $member-display-name-c,
+  $member-display-name-d,
+  $member-display-name-e,
+  $member-display-name-f
+);
+
+@mixin marker-modifire() {
+  $class-name: &;
+
+  @each $name in $member-name-list {
+    $index-key: index($member-name-list, $name);
+    $color: nth($member-color-list, $index-key);
+
+    &--#{$name} {
+      @include box-design(5px, 5px, 1, $color);
+
+      color: $color;
+      border: $member-marker-border-size solid $color;
+
+      &#{$class-name}--temp {
+        $temp-color: lighten($color, 15%);
+
+        @include box-design(5px, 5px, 1, $temp-color);
+
+        color: $temp-color;
+        border: $member-marker-border-size solid $temp-color;
+      }
+    }
+  }
+}
+
+.member-marker {
+  @include square($member-marker-size);
+  @include marker-modifire();
+
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: $member-marker-font-size;
+  line-height: $member-marker-line-height;
+  color: $font-color;
+  text-align: center;
+  vertical-align: middle;
+  cursor: default;
+
+  &--temp {
+    overflow: hidden;
+  }
+}

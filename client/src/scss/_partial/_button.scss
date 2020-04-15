@@ -1,5 +1,6 @@
 @import './util';
 @import './size';
+@import './color';
 
 @mixin btn-design($normal-color, $active-color, $disabled-color) {
   color: $normal-color;
@@ -102,15 +103,15 @@
   }
 
   &--primary {
-    @include btn-design(#5facff, #4c99ed, #93b3d5);
+    @include btn-design($primary-color, $primary-color-active, $primary-color-disabled);
   }
 
   &--secondary {
-    @include btn-design(#a0a0a0, #838383, #d8d8d8);
+    @include btn-design($secondary-color, $secondary-color-active, $secondary-color-disabled);
   }
 
   &--danger {
-    @include btn-design(#ff5f5f, #ed4c4c, #d59393);
+    @include btn-design($danger-color, $danger-color-active, $danger-color-disabled);
   }
 
   &.disabled {

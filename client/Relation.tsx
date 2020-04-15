@@ -96,7 +96,7 @@ const Relation: FC<IRelationProps> = ({relation, characters, isSkillActive, onCl
 
         return (
           <li key={'relationCharacter' + character.id} style={boxStyle} className={createClassName('relation', 'character', isHover ? 'active' : '')} >
-            <CharacterIcon character={character} isSkillActive={isSkillActive} isHover={isHover} />
+            <CharacterIcon modifire={['lg']} character={character} isSkillActive={isSkillActive} isHover={isHover} />
           </li>
         )
       })

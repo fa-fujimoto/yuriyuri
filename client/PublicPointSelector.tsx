@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
-import createClassName from './util/createClassName'
+import React, { FC, useMemo, useState, useCallback } from 'react'
 import Dialog from './Dialog'
 import { ICharacter, CharacterCollection, CharacterId } from './types/type'
+import { createClassName, createFullName } from './Util'
+import PublicPointList from './PublicPointList'
+import MemberMarker from './MemberMarker'
 
 interface IPublicPointSelectorProps {
   player: string
@@ -10,228 +12,167 @@ interface IPublicPointSelectorProps {
   activeCharacter: ICharacter
   supportPoint: number
   publicPoints: CharacterCollection<number[]>
-  isShow: boolean
+  cellLength: number
   onClickConfirmBtn: (characterId: CharacterId, point: number) => void
   onClickCancelBtn: (characterId: CharacterId, point: number) => void
 }
 
-interface IPublicPointSelectorState {
-  tempPublicPoints: CharacterCollection<number[]>
-  isShowConfirmDialog: boolean
-  isShowCancelDialog: boolean
-}
+const PublicPointSelector: FC<IPublicPointSelectorProps> = ({
+  player,
+  member,
+  characters,
+  activeCharacter,
+  supportPoint,
+  publicPoints,
+  cellLength,
+  onClickConfirmBtn,
+  onClickCancelBtn,
+}) => {
+  const playerIdx = useMemo<number>(() => member.findIndex((name) => name === player), [member])
 
-class PublicPointSelector extends Component<IPublicPointSelectorProps, IPublicPointSelectorState> {
-  constructor(props: IPublicPointSelectorProps) {
-    super(props)
+  const [tempPublicPoints, setTempPublicPoints] = useState<number[]>(member.map(() => 0))
+  const [isShowConfirmDialog, setIsShowConfirmDialog] = useState<boolean>(false)
+  const [isShowCancelDialog, setIsShowCancelDialog] = useState<boolean>(false)
 
-    const memberPublicPoint = props.member.map(() => {
-      return 0
-    })
+  const handlePointSelect = useCallback(point => {
+    const updatedTempPublicPoints = tempPublicPoints.slice()
+    updatedTempPublicPoints[playerIdx] = point
+    setTempPublicPoints(updatedTempPublicPoints)
+  }, [tempPublicPoints])
 
-    this.state = {
-      tempPublicPoints: {
-        'black': memberPublicPoint.slice(),
-        'gray': memberPublicPoint.slice(),
-        'green': memberPublicPoint.slice(),
-        'pink': memberPublicPoint.slice(),
-        'purple': memberPublicPoint.slice(),
-        'red': memberPublicPoint.slice(),
-        'sky': memberPublicPoint.slice(),
-        'white': memberPublicPoint.slice(),
-        'yellow': memberPublicPoint.slice(),
-      },
-      isShowConfirmDialog: false,
-      isShowCancelDialog: false,
-    }
+  const handleConfirmDialogPositive = useCallback(() => {
+    onClickConfirmBtn(activeCharacter.id, tempPublicPoints[playerIdx])
+  }, [activeCharacter, tempPublicPoints])
 
-    this.handleItemSelect = this.handleItemSelect.bind(this)
-  }
+  const handleConfirmDialogNegative = useCallback(() => {
+    setIsShowConfirmDialog(false)
+  }, [])
 
-  handleItemSelect(characterId: CharacterId, memberIdx: number, point: number): void {
-    const updatedPublicPoints = Object.assign({}, this.state.tempPublicPoints)
-    updatedPublicPoints[characterId][memberIdx] = point
+  const handleCancelDialogPositive = useCallback(() => {
+    onClickCancelBtn(activeCharacter.id, publicPoints[activeCharacter.id][playerIdx])
+  }, [])
 
-    this.setState({
-      tempPublicPoints: updatedPublicPoints,
-    })
-  }
+  const handleCancelDialogNegative = useCallback(() => {
+    setIsShowCancelDialog(false)
+  }, [])
 
-  render(): JSX.Element | null {
-    const className = 'public-point-selector'
-    const {props, state, handleItemSelect} = this
-    const {member, player, characters, activeCharacter, supportPoint, publicPoints, isShow, onClickConfirmBtn, onClickCancelBtn} = props
-    const {tempPublicPoints, isShowConfirmDialog, isShowCancelDialog} = state
-    const playerIdx = member.findIndex((name) => player === name)
+  const isSelected = useMemo<boolean>(() => tempPublicPoints[playerIdx] > 0, [tempPublicPoints, playerIdx])
 
-    const characterColumn = characters.map((character): JSX.Element => {
-      const publicPoint = publicPoints[character.id]
-      const tempPublicPoint = tempPublicPoints[character.id]
-      const isActive = activeCharacter.id === character.id
-      const selectableMax = supportPoint
-      const selectableMin = Math.max(...publicPoint) + 1
-
-      const characterColumnItems: JSX.Element[] = []
-
-      if (isActive && selectableMax >= selectableMin) {
-        for (let i = 1; i < 21; i++) {
-          const isSelectable = selectableMin <= i && i <= selectableMax
-          const selectedMemberIdx = tempPublicPoint.findIndex((point) => point === i)
-
-          const columnItem = isSelectable && selectedMemberIdx === -1 ? (
-            <li
-              className={createClassName(className, 'point-item', 'selectable')}
-              onClick={(): void => handleItemSelect(character.id, playerIdx, i)}
-            />
-          ) : (
-            <li className={createClassName(className, 'point-item')}>
-              <div className={createClassName(className, 'player-chip', 'temp')}>
-                {member[selectedMemberIdx]}
-              </div>
-            </li>
-          )
-
-          characterColumnItems.push(columnItem)
-        }
-
-        return (
-          <ul className={createClassName(className, 'point-list')}>
-            {characterColumnItems}
-          </ul>
-        )
-      } else {
-        for (let i = 1; i < 21; i++) {
-          const selectedMemberIdx = publicPoint.findIndex((point) => point === i)
-
-          const columnItem = selectedMemberIdx > 0 ? (
-            <li className={createClassName(className, 'point-item')}></li>
-          ) : (
-            <li className={createClassName(className, 'point-item')}>
-              <div className={createClassName(className, 'player-chip')}>
-                {member[selectedMemberIdx]}
-              </div>
-            </li>
-          )
-
-          characterColumnItems.push(columnItem)
-        }
-
-        return (
-          <ul className={createClassName(className, 'point-list')}>
-            {characterColumnItems}
-          </ul>
-        )
-      }
-    })
-
-    const headerItems: JSX.Element[] = []
-
-    for (let i = 1; i < 21; i++) {
-      headerItems.push(
-        <div className={createClassName(className, 'header-item')}>{i}</div>
-      )
-    }
-
-    const numberItems: JSX.Element[] = [
-      <div className={createClassName(className, 'number-header', 'empty')} />,
-    ]
-    const characterItems: JSX.Element[] = [
-      <div className={createClassName(className, 'number-header', 'empty')} />,
-    ]
-
-    for (let i = 0; i < characters.length; i++) {
-      const character = characters[i]
-
-      let numberText = ''
-
-      switch (i + 1) {
-      case 1:
-        numberText = `${i + 1}st`
-        break
-      case 2:
-        numberText = `${i + 1}nd`
-        break
-      case 3:
-        numberText = `${i + 1}rd`
-        break
-      default:
-        numberText = `${i + 1}th`
-        break
-      }
-
-      numberItems.push(
-        <div className={createClassName(className, 'number-item')}>
-          {numberText}
-        </div>
-      )
-
-      characterItems.push(
-        <div className={createClassName(className, 'character-item')}>
-          <div className={createClassName(className, 'character-icon')}>
-            <img src={character.iconSrc} alt={`${character.lastName} ${character.firstName}`} />
-          </div>
-        </div>
-      )
-    }
-
+  const textAreaElem = useMemo<JSX.Element>(() => {
     return (
-      isShow ? (
-        <div className={className}>
-          <div className={createClassName(className, 'table')}>
-            <div className={createClassName(className, 'static-area')}>
-              <div className={createClassName(className, 'number-column')}>
-                {numberItems}
-              </div>
-              <div className={createClassName(className, 'character-column')}>
-                {characterItems}
-              </div>
-            </div>
+      <div className={createClassName('public-point-selector', 'description-area')}>
+        <p className={createClassName('public-point-selector', 'text')}>
+          {`${createFullName(activeCharacter)}のコントロールを取得したい場合、コントロール点を公開してください。最も大きいコントロール点を公開したプレイヤーが${createFullName(activeCharacter)}のコントロールを取得します。`}
+        </p>
 
-            <div className={createClassName(className, 'scroll-area')}>
-              <header className={createClassName(className, 'header')}>
-                {headerItems}
-              </header>
-              <section className={createClassName(className, 'body')}>
-                {characterColumn}
-              </section>
-            </div>
-          </div>
+        <p className={createClassName('public-point-selector', 'annotation')}>
+          コントロール点の公開はアクションフェーズの各タイミングで行うことができますが、公開したコントロール点を減らすことはできません。
+        </p>
 
-          <div className={createClassName(className, 'btn-group')}>
-            {
-              tempPublicPoints[activeCharacter.id][playerIdx] ? (
-                <div onClick={(): void => this.setState({isShowConfirmDialog: true})}>確定</div>
-              ) : (null)
-            }
-            <div onClick={(): void => this.setState({isShowCancelDialog: true})}>キャンセル</div>
-          </div>
-
-          {
-            isShowConfirmDialog ? (
-              <Dialog
-                title={'点数を公開しますか？'}
-                onPositiveFunc={(): void => onClickConfirmBtn(activeCharacter.id, tempPublicPoints[activeCharacter.id][playerIdx])}
-                onNegativeFunc={(): void => this.setState({isShowConfirmDialog: false})}
-              >
-                {`${activeCharacter.lastName} ${activeCharacter.firstName}に${tempPublicPoints[activeCharacter.id][playerIdx]}点公開しますか？`}
-              </Dialog>
-            ) : (null)
-          }
-          {
-            isShowCancelDialog ? (
-              <Dialog
-                title={'点数を公開せずに終了しますか？'}
-                onPositiveFunc={(): void => onClickCancelBtn(activeCharacter.id, 0)}
-                onNegativeFunc={(): void => this.setState({isShowCancelDialog: false})}
-              >
-                {`${activeCharacter.lastName} ${activeCharacter.firstName}にコントロール点を公開せずに終了しますか？`}
-              </Dialog>
-            ) : (null)
-          }
-        </div>
-      ) : null
+        {
+          supportPoint === 0 ? (
+            <p className={createClassName('public-point-selector', 'annotation', 'danger')}>
+              {`あなたは${createFullName(activeCharacter)}に対して公開できるコントロール点を所持していません。`}
+            </p>
+          ) : undefined
+        }
+      </div>
     )
-  }
+  }, [activeCharacter, supportPoint])
+
+  const selectAreaElem = useMemo<JSX.Element>(() => {
+    return (
+      <div className={createClassName('public-point-selector', 'select-area')}>
+        <div className={createClassName('public-point-selector', 'table')}>
+          <PublicPointList
+            characters={characters}
+            activeCharacter={activeCharacter}
+            supportPoint={supportPoint}
+            cellLength={cellLength}
+            publicPoints={publicPoints}
+            tempPublicPoints={tempPublicPoints}
+            onPointSelect={handlePointSelect}
+          />
+        </div>
+      </div>
+    )
+  }, [activeCharacter, supportPoint, cellLength, publicPoints, tempPublicPoints, handlePointSelect])
+
+  const infoAreaElem = useMemo<JSX.Element>(() => {
+    return (
+      <div className={createClassName('public-point-selector', 'info-area')}>
+        <ul className={createClassName('public-point-selector', 'member-list')}>
+          {
+            member.map((name, idx) => {
+              return (
+                <li key={idx} className={createClassName('public-point-selector', 'member-item')}>
+                  <dl className={createClassName('public-point-selector', 'member-info')}>
+                    <dt className={createClassName('public-point-selector', 'member-icon')}>
+                      <MemberMarker idx={idx} />
+                    </dt>
+                    <dd className={createClassName('public-point-selector', 'member-name')}>
+                      {name}
+                    </dd>
+                  </dl>
+                </li>
+              )
+            })
+          }
+        </ul>
+      </div>
+    )
+  }, [member])
+
+  return (
+    <Dialog
+      title={'公開する点数を選択してください。'}
+      positiveTxt={'決定'}
+      dangerTxt={'終了'}
+      onPositiveFunc={
+        isSelected ? (
+          (): void => setIsShowConfirmDialog(true)
+        ) : undefined
+      }
+      onDangerFunc={() => setIsShowCancelDialog(true)}
+    >
+      <div className={createClassName('public-point-selector')}>
+        {textAreaElem}
+
+        {selectAreaElem}
+
+        {infoAreaElem}
+      </div>
+
+      {
+        isShowConfirmDialog ? (
+          <Dialog
+            title={'点数を確定してよろしいですか？'}
+            positiveTxt={'確定'}
+            negativeTxt={'取り消し'}
+            onPositiveFunc={handleConfirmDialogPositive}
+            onNegativeFunc={handleConfirmDialogNegative}
+          >
+            {`${createFullName(activeCharacter)}に対して${tempPublicPoints[playerIdx]}点のコントロール点を公開してよろしいですか？`}
+          </Dialog>
+        ) : undefined
+      }
+
+      {
+        isShowCancelDialog ? (
+          <Dialog
+            title={'点数を公開せずに終了しますか？'}
+            positiveTxt={'終了'}
+            negativeTxt={'キャンセル'}
+            onPositiveFunc={handleCancelDialogPositive}
+            onNegativeFunc={handleCancelDialogNegative}
+          >
+            {`${createFullName(activeCharacter)}に対してコントロール点を公開せずに終了してよろしいですか？`}
+          </Dialog>
+        ) : undefined
+      }
+
+    </Dialog>
+  )
 }
 
 export default PublicPointSelector

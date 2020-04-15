@@ -1,11 +1,24 @@
 $font-color: #333;
+$danger-font-color: #ff5f5f;
+
 $border-color: #aaa;
 $error-color: #f47a7a;
+
+$primary-color: #5facff;
+$primary-color-active: #4c99ed;
+$primary-color-disabled: #93b3d5;
+$secondary-color: #a0a0a0;
+$secondary-color-active: #838383;
+$secondary-color-disabled: #d8d8d8;
+$danger-color: $danger-font-color;
+$danger-color-active: #ed4c4c;
+$danger-color-disabled: #d59393;
 
 $positive-color: #0dba35;
 $negative-color: #0089a2;
 $white-border-color: #ccc;
 $divider-border-color: #aaa;
+$disabled-shade-color: rgba(#666, 0.5);
 
 $gray-box-bg: #eee;
 $base-background-color: #fff;
@@ -15,8 +28,13 @@ $dialog-background-color: #fff;
 $dialog-border-color: #707070;
 $dialog-font-color: $font-color;
 
+$table-border-color: $border-color;
+$table-cell-color: $base-background-color;
+$table-header-cell-color: #555;
+$table-disabled-shade-color: rgba(#666, 0.2);
+
 $character-icon-active-shade-color: rgba(#000, 0.2);
-$character-icon-disabled-shade-color: rgba(#666, 0.5);
+$character-icon-disabled-shade-color: $disabled-shade-color;
 $character-icon-selecting-shade-color: rgba(#5dffa8, 0.6);
 
 $character-main-black-color: #333;
@@ -47,3 +65,12 @@ $skill-shy-color: #535353;
 $skill-friendry-color: #96b774;
 $skill-cute-color: #d682b6;
 $skill-attracted-color: #c6ba7e;
+
+$member-display-name-a: #db7676;
+$member-display-name-b: #7495c9;
+$member-display-name-c: #69a56c;
+$member-display-name-d: #a176db;
+$member-display-name-e: #d09153;
+$member-display-name-f: #70acb1;
+
+$public-point-table-border-color: $table-border-color;

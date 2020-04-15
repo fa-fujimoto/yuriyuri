@@ -19,6 +19,7 @@ import SkillCard from './SkillCard'
 import RelationList from './RelationList'
 import CharacterViewer from './CharacterViewer'
 import PairSelector from './PairSelector'
+import PublicPointSelector from './PublicPointSelector'
 
 const characters = DefaultCharacters.map((character): ICharacter => {
   return Object.assign(character, {iconSrc: CharacterIcons[3][character.id]})
@@ -245,6 +246,34 @@ const ViewTest: FC<{}> = () => {
                   isSkillActive={false}
                   onValueChange={(value): void => handleCallback(value)}
                   onPairSelect={handleCallback}
+                />
+              </Ground>
+            )
+          }} />
+
+          <Route path='/test/PublicPointSelector/Normal' render={(): JSX.Element => {
+            return (
+              <Ground>
+                <PublicPointSelector
+                  player={'test'}
+                  member={['test', 'sample', 'group', 'test1']}
+                  characters={characters}
+                  activeCharacter={characters[0]}
+                  supportPoint={10}
+                  publicPoints={{
+                    black: [1, 2, 3, 4],
+                    gray: [1, 2, 3, 4],
+                    green: [1, 2, 3, 4],
+                    pink: [1, 2, 3, 4],
+                    purple: [1, 2, 3, 4],
+                    red: [1, 2, 3, 4],
+                    sky: [1, 2, 3, 4],
+                    white: [1, 2, 3, 4],
+                    yellow: [1, 2, 3, 4],
+                  }}
+                  cellLength={20}
+                  onClickConfirmBtn={handleCallback}
+                  onClickCancelBtn={handleCallback}
                 />
               </Ground>
             )
