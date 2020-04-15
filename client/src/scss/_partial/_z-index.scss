@@ -8,6 +8,9 @@ $relation-characters-index: 20;
 $relation-line-index: 30;
 $relation-chacter-active-index: 35;
 $relation-characters-click-area-index: 40;
+$relation-max-index: max($relation-characters-index, $relation-line-index, $relation-chacter-active-index, $relation-characters-click-area-index);
+
+$public-point-selector-index: $relation-max-index + 10;
 
 $cutin-index: 900;
 $character-selector-index: 900;

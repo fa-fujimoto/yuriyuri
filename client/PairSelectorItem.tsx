@@ -33,15 +33,15 @@ const PairSelectorItem: FC<IPairSelectorItemProps> = ({pair, value, maxValue, id
         onMouseLeave={(): void => setIsHover(false)}
         onClick={onPairSelect}
       >
-        <CharacterIcon character={char1} modifire={['sm']} isSkillActive={isSkillActive} isHover={isHover} />
+        <CharacterIcon character={char1} modifire={['md']} isSkillActive={isSkillActive} isHover={isHover} />
         <span className={createClassName('pair-selector-item', 'cross-icon')}>
           <Icon iconName={'exchange-alt'} />
         </span>
-        <CharacterIcon character={char2} modifire={['sm']} isSkillActive={isSkillActive} isHover={isHover} />
+        <CharacterIcon character={char2} modifire={['md']} isSkillActive={isSkillActive} isHover={isHover} />
       </div>
 
       <div className={createClassName('pair-selector-item', 'input-box')}>
-        <label className={createClassName('pair-selector-item', 'value-label')} htmlFor={`pairSelectorPoint${idx}`}>支援値</label>
+        <label className={createClassName('pair-selector-item', 'value-label')} htmlFor={`pairSelectorPoint${idx}`}>支杴値</label>
         <input
           className={createClassName('pair-selector-item', 'value-input')}
           id={`pairSelectorPoint${idx}`}

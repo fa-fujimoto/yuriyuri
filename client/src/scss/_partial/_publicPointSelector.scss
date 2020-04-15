@@ -1,0 +1,80 @@
+@import './z-index';
+@import './util';
+@import './size';
+@import './color';
+
+%text-design {
+  line-height: 1.5;
+  text-align: justify;
+  text-justify: inter-character;
+}
+
+.public-point-selector {
+  $cellSize: 60px;
+
+  width: $public-point-list-width;
+
+  &__description-area {
+    *:not(:first-child) {
+      margin-top: 4px;
+    }
+  }
+
+  &__text {
+    @extend %text-design;
+
+    font-size: 16px;
+  }
+
+  &__annotation {
+    @extend %text-design;
+
+    padding-left: 1em;
+    font-size: 14px;
+    text-indent: -1em;
+    vertical-align: middle;
+
+    &::before {
+      width: 1em;
+      text-align: center;
+      content: '※';
+    }
+
+    &--danger {
+      color: $danger-font-color;
+    }
+  }
+
+  &__select-area {
+    margin-top: 16px;
+  }
+
+  &__info-area {
+    margin-top: 16px;
+  }
+
+  &__member {
+    &-list {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    &-item {
+      display: inline-block;
+
+      &:not(:last-child) {
+        margin-right: 16px;
+      }
+    }
+
+    &-info {
+      display: flex;
+      align-items: center;
+    }
+
+    &-name {
+      margin-left: 8px;
+    }
+  }
+}

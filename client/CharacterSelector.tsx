@@ -30,7 +30,7 @@ const CharacterSelector: FC<ICharacterSelectorProps> = ({
   isSkillActive,
   onSelect,
 }) => {
-  const size = useMemo(() => 'sm', [])
+  const size = useMemo(() => 'md', [])
   const [selected, setSelected] = useState<ICharacter[]>(selectedCharacters)
   const [focused, setFocused] = useState<ICharacter>(characters[0])
 

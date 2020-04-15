@@ -3,15 +3,20 @@ $btn-lg-size: 48px;
 $btn-md-size: 38px;
 $btn-sm-size: 31px;
 
-$character-icon-lg-size: 220px;
-$character-icon-md-size: 150px;
-$character-icon-sm-size: 90px;
-$character-icon-ss-size: 56px;
+$character-icon-lg-size: 150px;
+$character-icon-md-size: 90px;
+$character-icon-sm-size: 56px;
+$character-icon-ss-size: 34px;
 
 $character-icon-border-lg-size: 10px;
 $character-icon-border-md-size: 5px;
 $character-icon-border-sm-size: 2px;
 $character-icon-border-ss-size: 2px;
+
+$member-marker-size: $character-icon-ss-size;
+$member-marker-font-size: 22px;
+$member-marker-border-size: 2px;
+$member-marker-line-height: $member-marker-size - ($member-marker-border-size * 2);
 
 $pair-selector-item-around-space-size: 20px;
 $pair-selector-item-between-space-size: 16px;
@@ -22,3 +27,21 @@ $pair-selector-item-width: ($pair-selector-item-around-space-size * 2) + ($pair-
 $pair-selector-list-border-width: 1px;
 $pair-selector-list-item-width: $pair-selector-item-width + $pair-selector-list-border-width;
 $pair-selector-list-width: ($pair-selector-list-item-width * 3) + $pair-selector-list-border-width;
+
+$public-point-table-cell-space-size: 6px;
+$public-point-table-border-size: 1px;
+$public-point-table-cell-size: $member-marker-size;
+$public-point-table-cell-total-size: $public-point-table-cell-size + $public-point-table-cell-space-size * 2;
+$public-point-table-view-length: 12;
+$public-point-table-view-size: $public-point-table-cell-total-size / 2 + $public-point-table-cell-total-size * $public-point-table-view-length + $public-point-table-border-size * ($public-point-table-view-length - 1);
+
+$public-point-thead-font-size: 18px;
+$public-point-thead-cell-space-size-vertical: 4px;
+$public-point-thead-cell-space-size-horizontal: $public-point-table-cell-space-size;
+$public-point-thead-cell-size: $public-point-thead-font-size;
+
+$public-point-label-column-border-size: 2px;
+$public-point-label-column-length: 1;
+$public-point-label-column-size: ($public-point-table-cell-size + $public-point-table-cell-space-size * 2) * $public-point-label-column-length + ($public-point-table-border-size) * ($public-point-label-column-length - 1) + $public-point-label-column-border-size;
+
+$public-point-list-width: $public-point-table-view-size + $public-point-label-column-size + $public-point-table-border-size * 2;

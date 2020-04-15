@@ -29,7 +29,7 @@ const CharacterViewer: FC<ICharacterViewerProps> = ({character, characters, rela
             <CharacterIcon
               character={character}
               isSkillActive={false}
-              modifire={['md']}
+              modifire={['lg']}
             />
           </div>
 

@@ -1,0 +1,131 @@
+@import './color';
+@import './util';
+@import './size';
+
+%cell {
+  text-align: center;
+  border-bottom: $public-point-table-border-size solid $public-point-table-border-color;
+}
+
+%thead-cell {
+  min-width: $public-point-table-cell-size;
+  min-height: $public-point-thead-cell-size;
+  padding: $public-point-thead-cell-space-size-vertical $public-point-thead-cell-space-size-horizontal;
+  font-size: $public-point-thead-font-size;
+  line-height: 1;
+  color: $base-background-color;
+  background-color: $table-header-cell-color;
+}
+
+%tbody-cell {
+  @include square($public-point-table-cell-size);
+
+  padding: $public-point-table-cell-space-size;
+  background-color: $table-cell-color;
+}
+
+%disabled-cell {
+  position: relative;
+
+  &::before {
+    @include centerize();
+
+    z-index: 2;
+    content: '';
+    background-color: $table-disabled-shade-color;
+  }
+}
+
+.public-point-list {
+  $class-name: &;
+
+  &__content {
+    display: flex;
+    border: {
+      top: $public-point-table-border-size solid $public-point-table-border-color;
+      right: $public-point-table-border-size solid $public-point-table-border-color;
+      left: $public-point-table-border-size solid $public-point-table-border-color;
+    }
+  }
+
+  &__select-area {
+    max-width: $public-point-table-view-size;
+    overflow: scroll;
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+
+    &-label,
+    &-item {
+      @extend %cell;
+
+      border-right: $public-point-label-column-border-size solid $public-point-table-border-color;
+    }
+
+    &-label {
+      @extend %thead-cell;
+    }
+
+    &-item {
+      @extend %tbody-cell;
+
+      &--disabled {
+        @extend %disabled-cell;
+      }
+    }
+  }
+
+  &__table {
+    display: table;
+
+    &--clickable {
+      #{$class-name}__tbody {
+        #{$class-name}__row:not(#{$class-name}__row--clickable) {
+          #{$class-name}__cell {
+            @extend %disabled-cell;
+          }
+        }
+      }
+    }
+  }
+
+  &__thead {
+    display: table-header-group;
+
+    #{$class-name}__cell {
+      @extend %thead-cell;
+    }
+  }
+
+  &__tbody {
+    display: table-row-group;
+
+    #{$class-name}__cell {
+      @extend %tbody-cell;
+    }
+  }
+
+  &__row {
+    display: table-row;
+  }
+
+  &__cell {
+    @extend %cell;
+
+    display: table-cell;
+    vertical-align: middle;
+    cursor: default;
+
+    &:not(:last-child) {
+      border-right: $public-point-table-border-size solid $public-point-table-border-color;
+    }
+
+    &--active:empty {
+      @include box-design(7px, 0, 1, $public-point-table-border-color);
+
+      cursor: pointer;
+    }
+  }
+}

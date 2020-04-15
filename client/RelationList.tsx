@@ -19,7 +19,7 @@ const RelationList: FC<IRelationListProps> = ({character, characters, relation})
       targetCharacter ? (
         <li key={`relationList${character.id}${targetCharacter.id}`} className={createClassName('relation-list', 'item', targetCharacter.id)}>
           <div className={createClassName('relation-list', 'icon')}>
-            <CharacterIcon character={targetCharacter} modifire={['sm']} isSkillActive={false} />
+            <CharacterIcon character={targetCharacter} modifire={['md']} isSkillActive={false} />
           </div>
 
           <div className={createClassName('relation-list', 'info')}>

@@ -42,7 +42,7 @@ const CharacterSupportPoint: FC<ICharacterSupportPointProps> = ({
         key={`characterSupportPointItem${character.id}`}
       >
         <div className={createClassName('character-support-point', 'icon-area')}>
-          <CharacterIcon character={character} modifire={['ss']} isSkillActive={false} onClick={onIconClick} />
+          <CharacterIcon character={character} modifire={['sm']} isSkillActive={false} onClick={onIconClick} />
         </div>
 
         <div className={createClassName('character-support-point', 'point-area', [modifireName, character.id])}>

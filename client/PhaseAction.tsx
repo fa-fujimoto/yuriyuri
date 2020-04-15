@@ -391,13 +391,13 @@ const PhaseAction: FC<IActionProps> = ({
   return (
     <>
       <PublicPointSelector
-        isShow={isShowPublicPointSelector && controlRightIdx === undefined}
         player={player}
         member={member}
         characters={characters}
         activeCharacter={playCharacter}
         supportPoint={characterSupportPoint[playCharacter.id]}
         publicPoints={publicPoints}
+        cellLength={20}
         onClickConfirmBtn={handlePublicPointUpdate}
         onClickCancelBtn={handlePublicPointUpdate}
       />
